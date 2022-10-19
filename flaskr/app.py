@@ -8,7 +8,7 @@ from flask_restful import Api
 from modelos import db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///eporra.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgrespw@db:5432/misw4202'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
