@@ -1,14 +1,14 @@
 import enum
 
+from sqlalchemy import Enum
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from enum import Enum
 
 db = SQLAlchemy()
 
 
-class Format(Enum):
+class Format(enum.Enum):
     aac = 'AAC'
     mp3 = 'MP3'
     wav = 'WAV'
@@ -16,7 +16,7 @@ class Format(Enum):
     wma = 'WMA'
 
 
-class Status(Enum):
+class Status(enum.Enum):
     uploaded = 'UPLOADED'
     processed = 'PROCESSED'
 
@@ -35,7 +35,7 @@ class Task(db.Model):
     new_format = db.Column(Enum(Format))
     status = db.Column(Enum(Status))
     timestamp = db.Column(db.String(128))
-    usuario = db.Column(db.Integer, db.ForeignKey("usuario.id"))
+    user = db.Column(db.Integer, db.ForeignKey("user.id"))
     file = db.relationship('File', cascade='all, delete, delete-orphan')
 
 
