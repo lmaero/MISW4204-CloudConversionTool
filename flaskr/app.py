@@ -9,6 +9,7 @@ from modelos import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgrespw@db:5432'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://username:password@localhost:5432/misw4204'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
