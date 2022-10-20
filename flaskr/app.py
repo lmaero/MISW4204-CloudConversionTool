@@ -8,7 +8,7 @@ from flask_restful import Api
 from modelos import db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgrespw@db:5432/misw4202'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgrespw@db:5432'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -26,5 +26,5 @@ api = Api(app)
 jwt = JWTManager(app)
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 6000))
     app.run(debug=True, host='0.0.0.0', port=port)
