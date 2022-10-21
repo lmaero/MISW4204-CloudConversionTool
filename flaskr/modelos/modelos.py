@@ -1,6 +1,5 @@
 import enum
 
-from sqlalchemy import Enum
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
@@ -42,7 +41,6 @@ class Task(db.Model):
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(128))
-    #extension = db.Column(Enum(Format))
     extension = db.Column(db.String(128))
     task = db.Column(db.Integer, db.ForeignKey("task.id"))
 
