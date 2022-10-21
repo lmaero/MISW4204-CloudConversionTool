@@ -6,7 +6,6 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 db = SQLAlchemy()
 
-
 class Format(enum.Enum):
     aac = 'AAC'
     mp3 = 'MP3'
@@ -23,7 +22,7 @@ class Status(enum.Enum):
 class Username(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128))
-    email = db.Column(db.String(128))
+    email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128))
     task = db.relationship('Task', cascade='all, delete, delete-orphan')
 
