@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "MISW4204",
+      "Group": "Servers",
+      "Host": "db",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "admin",
+      "PassFile": "/.pgpass",
+      "SSLMode": "prefer"
+    }
+  }
+}
