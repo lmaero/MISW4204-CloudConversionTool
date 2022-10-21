@@ -3,6 +3,8 @@ import enum
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from datetime import datetime, timezone, timedelta
+from sqlalchemy import DateTime
 
 db = SQLAlchemy()
 
@@ -20,24 +22,28 @@ class Status(enum.Enum):
 
 
 class Username(db.Model):
+    __tablename__ = 'username'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128))
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128))
-    task = db.relationship('Task', cascade='all, delete, delete-orphan')
+    task = db.relationship('Task', backref='username', cascade='all, delete, delete-orphan')
 
 
 class Task(db.Model):
+    __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key=True)
     original_format = db.Column(db.String(128))
     new_format = db.Column(db.String(128))
     status = db.Column(db.String(128))
-    timestamp = db.Column(db.String(128))
-    user = db.Column(db.Integer, db.ForeignKey("username.id"))
+    timestamp = db.Column(DateTime(timezone=True), default=datetime.now())
     file = db.relationship('File', cascade='all, delete, delete-orphan')
+    user = db.Column(db.Integer, db.ForeignKey("username.id"))
+
 
 
 class File(db.Model):
+    __tablename__ = 'file'
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(128))
     extension = db.Column(db.String(128))
