@@ -5,8 +5,8 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
-
-from modelos import db, Username, Task, File, Format, Status
+from modelos import db, Username
+from vistas.VistaLogin import VistaLogin
 
 app = Flask(__name__)
 
@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.f
                                                                                       APP_DB_NAME)
 
 # Local URL
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://username:password@localhost:5432/misw4204'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
@@ -34,15 +34,13 @@ db.create_all()
 cors = CORS(app)
 
 api = Api(app)
+api.add_resource(VistaLogin, '/api/auth/login')
 
 jwt = JWTManager(app)
 
+# archivo = File(filename='file', extension='mp3', task=tarea.id)
 
-#archivo = File(filename='file', extension='mp3', task=tarea.id)
-
-usuario = Username(username='alonso',
-                   email='a.cantu@uniandes.edu.co',
-                   password='1234')
+usuario = Username(username='alonso', email='a.cantu@uniandes.edu.co', password='1234')
 '''
 tarea = Task(original_format='mp3',
              new_format='mp3',
@@ -50,7 +48,6 @@ tarea = Task(original_format='mp3',
              timestamp='1234',
              user=usuario.id)
 '''
-
 
 db.session.add(usuario)
 db.session.commit()
