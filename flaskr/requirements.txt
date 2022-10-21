@@ -10,5 +10,4 @@ flask_sqlalchemy==3.0.2
 marshmallow==3.18.0
 marshmallow_sqlalchemy==0.28.1
 flask_cors==3.0.10
-
-pg8000==1.29.2
+pg8000==1.17.0
