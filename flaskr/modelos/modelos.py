@@ -31,9 +31,9 @@ class Username(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    original_format = db.Column(Enum(Format))
-    new_format = db.Column(Enum(Format))
-    status = db.Column(Enum(Status))
+    original_format = db.Column(db.String(128))
+    new_format = db.Column(db.String(128))
+    status = db.Column(db.String(128))
     timestamp = db.Column(db.String(128))
     user = db.Column(db.Integer, db.ForeignKey("username.id"))
     file = db.relationship('File', cascade='all, delete, delete-orphan')
@@ -42,7 +42,8 @@ class Task(db.Model):
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(128))
-    extension = db.Column(Enum(Format))
+    #extension = db.Column(Enum(Format))
+    extension = db.Column(db.String(128))
     task = db.Column(db.Integer, db.ForeignKey("task.id"))
 
 

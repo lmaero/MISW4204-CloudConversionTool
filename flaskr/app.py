@@ -5,7 +5,8 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
-from modelos import db
+
+from modelos import db, Username, Task, File, Format, Status
 
 app = Flask(__name__)
 
@@ -35,6 +36,24 @@ cors = CORS(app)
 api = Api(app)
 
 jwt = JWTManager(app)
+
+
+#archivo = File(filename='file', extension='mp3', task=tarea.id)
+
+usuario = Username(username='alonso',
+                   email='a.cantu@uniandes.edu.co',
+                   password='1234')
+'''
+tarea = Task(original_format='mp3',
+             new_format='mp3',
+             status='uploaded',
+             timestamp='1234',
+             user=usuario.id)
+'''
+
+
+db.session.add(usuario)
+db.session.commit()
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 6000))
