@@ -16,11 +16,11 @@ POSTGRES_PASS = os.environ.get("POSTGRES_PASSWORD")
 APP_DB_NAME = os.environ.get("APP_DB_NAME")
 
 # Docker URL
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS,
-#                                                                                      APP_DB_NAME)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS,
+                                                                                      APP_DB_NAME)
 
 # Local URL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
@@ -37,7 +37,6 @@ cors = CORS(app)
 api = Api(app)
 api.add_resource(VistaLogin, '/api/auth/login')
 api.add_resource(VistaTasks, '/api/tasks')
-
 
 jwt = JWTManager(app)
 
