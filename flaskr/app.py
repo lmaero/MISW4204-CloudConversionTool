@@ -24,6 +24,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.f
 
 # Local URL
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -60,6 +61,14 @@ tarea2 = Task(original_format='aac',
               status='uploaded',
               file=archivo2.id)
 db.session.add(tarea2)
+db.session.commit()
+
+archivo = File(filename='file', extension='mp3', task=tarea.id)
+db.session.add(archivo)
+db.session.commit()
+
+archivo2 = File(filename='file', extension='mp3', task=tarea2.id)
+db.session.add(archivo2)
 db.session.commit()
 
 cors = CORS(app)
