@@ -9,8 +9,13 @@ from modelos import db
 
 app = Flask(__name__)
 
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_PASS = os.environ.get("POSTGRES_PASSWORD")
+APP_DB_NAME = os.environ.get("APP_DB_NAME")
+
 # Docker URL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgrespw@db:5432'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS,
+                                                                                      APP_DB_NAME)
 
 # Local URL
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://username:password@localhost:5432/misw4204'
