@@ -4,10 +4,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
-from flask_sqlalchemy import SQLAlchemy
 
 from modelos import db, Username, File, Task
-from modelos import Username, File, Task
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTasks import VistaTasks
 from vistas.VistaTask import VistaTask
@@ -22,7 +20,7 @@ APP_DB_NAME = os.environ.get("APP_DB_NAME")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS, APP_DB_NAME)
 
 # Local URL
-#app.config['SQLALCHEMY_DATABASE_URI'] =
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
@@ -61,11 +59,6 @@ archivo2 = File(filename='file', extension='mp3', task=tarea2.id)
 db.session.add(archivo2)
 db.session.commit()
 
-
-
-
-
-
 cors = CORS(app)
 
 api = Api(app)
@@ -75,8 +68,6 @@ api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 
 jwt = JWTManager(app)
-
-
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 6000))
