@@ -8,6 +8,7 @@ from flask_restful import Api
 from modelos import db, Username
 from vistas.VistaLogin import VistaLogin
 from vistas.VistaTasks import VistaTasks
+from vistas.VistaTask import VistaTask
 
 app = Flask(__name__)
 
@@ -37,6 +38,7 @@ cors = CORS(app)
 api = Api(app)
 api.add_resource(VistaLogin, '/api/auth/login')
 api.add_resource(VistaTasks, '/api/tasks')
+api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 
 jwt = JWTManager(app)
 
