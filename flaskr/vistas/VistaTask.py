@@ -37,7 +37,7 @@ class VistaTask(Resource):
 
             elif task.status=="UPLOADED":
 
-                if request.jason.get("new_format",task.new_format):
+                if request.json.get("new_format",task.new_format):
                     task.status=request.json.get("status",task.status)
                     db.session.commit()
                     return task_schema.dump(task)
