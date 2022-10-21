@@ -21,7 +21,7 @@ class Status(enum.Enum):
     processed = 'PROCESSED'
 
 
-class User(db.Model):
+class Username(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128))
     email = db.Column(db.String(128))
@@ -35,7 +35,7 @@ class Task(db.Model):
     new_format = db.Column(Enum(Format))
     status = db.Column(Enum(Status))
     timestamp = db.Column(db.String(128))
-    user = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.Column(db.Integer, db.ForeignKey("username.id"))
     file = db.relationship('File', cascade='all, delete, delete-orphan')
 
 
@@ -48,7 +48,7 @@ class File(db.Model):
 
 class FileSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = User
+        model = File
         include_fk = True
         load_instance = True
 
@@ -58,7 +58,7 @@ class FileSchema(SQLAlchemyAutoSchema):
 
 class TaskSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = User
+        model = Task
         include_relationships = True
         include_fk = True
         load_instance = True
@@ -70,9 +70,9 @@ class TaskSchema(SQLAlchemyAutoSchema):
     file = fields.List(fields.Nested(FileSchema()))
 
 
-class UserSchema(SQLAlchemyAutoSchema):
+class UsernameSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = User
+        model = Username
         include_relationships = True
         include_fk = True
         load_instance = True
