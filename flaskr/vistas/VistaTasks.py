@@ -99,7 +99,7 @@ class VistaTasks(Resource):
         if file and allowed_file(file.filename):
             sec_filename = secure_filename(file.filename)
             filename = os.path.splitext(sec_filename)[0]
-            file_extension = os.path.splitext(sec_filename)[1]
+            file_extension = os.path.splitext(sec_filename)[1].split(".")[1]
             file_original = getcwd() + "/files/" + sec_filename
             file.save(file_original)
 
