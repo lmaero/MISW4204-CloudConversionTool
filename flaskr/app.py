@@ -32,34 +32,7 @@ app_context.push()
 
 db.init_app(app)
 db.create_all()
-"""
-usuario = Username(username='alonso', email='a.cantu@uniandes.edu.co', password='1234')
-db.session.add(usuario)
-db.session.commit()
 
-archivo = File(filename='file', extension='mp3', location="home", user=usuario.id)
-db.session.add(archivo)
-db.session.commit()
-
-archivo2 = File(filename='file', extension='mp3', location="home", user=usuario.id)
-db.session.add(archivo2)
-db.session.commit()
-
-tarea = Task(original_format='mp3',
-             new_format='mp3',
-             status='uploaded',
-             file=archivo.id)
-db.session.add(tarea)
-db.session.commit()
-
-tarea2 = Task(original_format='aac',
-              new_format='mp3',
-              status='uploaded',
-              file=archivo2.id)
-
-db.session.add(tarea2)
-db.session.commit()
-"""
 cors = CORS(app)
 
 api = Api(app)
