@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db, Username, File, Task
+from vistas.VistaFile import VistaFile
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTasks import VistaTasks
 from vistas.VistaTask import VistaTask
@@ -17,7 +18,8 @@ POSTGRES_PASS = os.environ.get("POSTGRES_PASSWORD")
 APP_DB_NAME = os.environ.get("APP_DB_NAME")
 
 # Docker URL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS, APP_DB_NAME)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS,
+                                                                                      APP_DB_NAME)
 
 # Local URL
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://admin:admin@localhost:5432/postgres'
@@ -36,7 +38,6 @@ usuario = Username(username='alonso', email='a.cantu@uniandes.edu.co', password=
 db.session.add(usuario)
 db.session.commit()
 
-
 tarea = Task(original_format='mp3',
              new_format='mp3',
              status='uploaded',
@@ -45,9 +46,9 @@ db.session.add(tarea)
 db.session.commit()
 
 tarea2 = Task(original_format='aac',
-             new_format='mp3',
-             status='uploaded',
-             user=usuario.id)
+              new_format='mp3',
+              status='uploaded',
+              user=usuario.id)
 db.session.add(tarea2)
 db.session.commit()
 
@@ -66,6 +67,7 @@ api.add_resource(VistaLogin, '/api/auth/login')
 api.add_resource(VistaSignUp, '/api/auth/signup')
 api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
+api.add_resource(VistaFile, '/api/files/<filename>')
 
 jwt = JWTManager(app)
 
