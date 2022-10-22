@@ -53,6 +53,8 @@ class VistaTask(Resource):
             return {"Message":"No task found"}
         
 
+        try:
+            task = Task.query.get_or_404(id_task)
 
     
 
