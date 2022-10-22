@@ -6,11 +6,21 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
-from modelos import File, Task, TaskSchema, db
+from modelos import File, Task, TaskSchema, db, FileSchema
 
 task_schema = TaskSchema()
+file_schema = FileSchema()
 
 ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma'}
+
+
+class Result:
+    def __init__(self, id, original_format, new_format, status, filename):
+        self.id = id
+        self.original_format = original_format
+        self.new_format = new_format
+        self.status = status
+        self.filename = filename
 
 
 def allowed_file(filename):
@@ -22,12 +32,65 @@ class VistaTasks(Resource):
 
     @jwt_required()
     def get(self):
-        tasks = []
+
+        # Get user information
+        token = request.headers["Authorization"].split(" ")[1]
+        decoded_token = jwt.decode(token, "frase-secreta", algorithms=["HS256"])
+        user_id = decoded_token["sub"]
+
+        # Get optional parameters
         try:
-            tasks = Task.query.all()
+            max_number_of_results = request.headers['Max']
+        except:
+            max_number_of_results = 1
+        try:
+            order = request.headers['Order']
+        except:
+            order = 0
+
+        # Get data from the database
+        results = db.engine.execute(
+            "select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status "
+            "from username "
+            "left join file on username.id=file.user "
+            "left join task on file.id=task.file "
+            "where 1=1 "
+            "and username.id = {}".format(user_id)
+        )
+
+        tasks_in_db = [row for row in results]
+        tasks = []
+        for task in tasks_in_db:
+            print(task)
+            result = Result(task[0], task[1], task[2], task[5], task[4])
+            result_as_dict = result.__dict__
+            tasks.append(result_as_dict)
+
+        # List return based on the criteria selected
+        result_list = []
+        counter = 0
+        if order == 0:
+            for task in tasks:
+                result_list.append(task)
+                counter += 1
+                if counter == max_number_of_results:
+                    break
+        else:
+            for task in tasks[::-1]:
+                result_list.append(task)
+                counter += 1
+                if counter == max_number_of_results:
+                    break
+        return result_list
+
+        '''
+        try:
+            # tasks = Task.query.all()
+            tasks = Task.query.limit(1).all()
             return [task_schema.dump(task) for task in tasks]
         except:
             return {"message": "There is no information for tasks"}
+        '''
 
     @jwt_required()
     def post(self):
