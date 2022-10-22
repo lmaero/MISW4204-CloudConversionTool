@@ -1,5 +1,6 @@
 from os import getcwd
 
+import requests
 from celery import Celery
 from pydub import AudioSegment
 
@@ -19,3 +20,7 @@ def convert_file(task, file):
     task.status = "PROCESSED"
     db.session.add(task)
     db.session.commit()
+
+    requests.post("http://mail:7000/api/mail/send",
+                  json={"recipient": "a.cantu@uniandes.edu.co", "title": "Processed File",
+                        "message": "Your file is ready, download it here"})
