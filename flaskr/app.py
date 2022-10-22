@@ -16,6 +16,7 @@ app = Flask(__name__)
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASS = os.environ.get("POSTGRES_PASSWORD")
 APP_DB_NAME = os.environ.get("APP_DB_NAME")
+UPLOAD_FOLDER = './files'
 
 # Docker URL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.format(POSTGRES_USER, POSTGRES_PASS,
@@ -27,6 +28,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@db:5432/{}'.f
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 app_context = app.app_context()
 app_context.push()
@@ -64,6 +67,7 @@ cors = CORS(app)
 
 api = Api(app)
 api.add_resource(VistaLogin, '/api/auth/login')
+# api.add_resource(VistaSignUp, '/api/auth/signup')
 api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 api.add_resource(VistaFile, '/api/files/<filename>')
