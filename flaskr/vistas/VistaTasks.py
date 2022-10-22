@@ -83,15 +83,6 @@ class VistaTasks(Resource):
                     break
         return result_list
 
-        '''
-        try:
-            # tasks = Task.query.all()
-            tasks = Task.query.limit(1).all()
-            return [task_schema.dump(task) for task in tasks]
-        except:
-            return {"message": "There is no information for tasks"}
-        '''
-
     @jwt_required()
     def post(self):
         token = request.headers["Authorization"].split(" ")[1]
