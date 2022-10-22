@@ -1,6 +1,5 @@
 import os
 from os import getcwd
-
 import jwt
 from flask import request
 from flask_jwt_extended import jwt_required

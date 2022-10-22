@@ -10,6 +10,7 @@ from vistas.VistaFile import VistaFile
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
+from notificator.Mail import MailNotificator
 
 app = Flask(__name__)
 
@@ -26,6 +27,12 @@ app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'misw4204grupo9@gmail.com'
+app.config['MAIL_PASSWORD'] = 'hbipfeffulmgidkx'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 app_context = app.app_context()
 app_context.push()
@@ -41,6 +48,9 @@ api.add_resource(VistaSignUp, '/api/auth/signup')
 api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 api.add_resource(VistaFile, '/api/files/<filename>')
+
+notificator = MailNotificator(app)
+notificator.send('camilogalvezv@gmail.com', 'Prueba', 'Super prueba')
 
 jwt = JWTManager(app)
 
