@@ -5,9 +5,9 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
-from modelos import db, Username, File, Task
-from vistas.VistaLogin import VistaLogin, VistaSignUp
+from modelos import db
 from vistas.VistaFile import VistaFile
+from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
 
