@@ -129,3 +129,5 @@ class VistaTasks(Resource):
             created_task["confirmation"] = "Task was created successfully"
 
             return created_task, 201
+        else:
+            return {'message': 'The file is corrupted or the extension files is not allowed'}, 400
