@@ -54,5 +54,6 @@ class VistaTask(Resource):
             task = db.session.query(Task).filter(Task.id == id_task).first()
             db.session.delete(task)
             db.session.commit()
+            return {"message": "The task was removed successfully"}, 204
         except:
-            return {"message": "The id provided does not exist in the database"}
+            return {"message": "The id provided does not exist in the database"}, 200
