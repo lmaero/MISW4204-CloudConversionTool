@@ -60,15 +60,8 @@ tarea2 = Task(original_format='aac',
               new_format='mp3',
               status='uploaded',
               file=archivo2.id)
+
 db.session.add(tarea2)
-db.session.commit()
-
-archivo = File(filename='file', extension='mp3', task=tarea.id)
-db.session.add(archivo)
-db.session.commit()
-
-archivo2 = File(filename='file', extension='mp3', task=tarea2.id)
-db.session.add(archivo2)
 db.session.commit()
 
 cors = CORS(app)
