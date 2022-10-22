@@ -6,10 +6,10 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db, Username, File, Task
-from vistas.VistaFile import VistaFile
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTasks import VistaTasks
 from vistas.VistaTask import VistaTask
+from vistas.VistaFile import VistaFile
 
 app = Flask(__name__)
 
