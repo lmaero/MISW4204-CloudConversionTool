@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from modelos import db, Username, File, Task
 from modelos import Username, File, Task
-from vistas.VistaLogin import VistaLogin
+from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTasks import VistaTasks
 from vistas.VistaTask import VistaTask
 
@@ -70,6 +70,7 @@ cors = CORS(app)
 
 api = Api(app)
 api.add_resource(VistaLogin, '/api/auth/login')
+api.add_resource(VistaSignUp, '/api/auth/signup')
 api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 
