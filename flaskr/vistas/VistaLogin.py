@@ -5,6 +5,7 @@ from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 
 from modelos import Username, UsernameSchema, db
+from utils.utils import password_check
 
 username_schema = UsernameSchema()
 
@@ -44,19 +45,20 @@ class VistaSignUp(Resource):
         try:
             if "password" not in data.keys():
                 return "You should provide a password", 400
+            if not password_check(data["password"])[0]:  # Check if password is valid
+                return password_check(data["password"])[1], 400  # Return corresponding validation message
             if "email" not in data.keys() and "username" not in data.keys():
                 return "You should provide either an email or an username", 400
             if db.session.query(Username).filter_by(email=data["email"]).first():
                 return "User already registered, please use another email", 400
 
-            new_user = Username(
-                username=data['username'],
-                password=data['password'],
-                email=data['email']
-            )
+            new_user = Username(username=data['username'], password=data['password'], email=data['email'])
             db.session.add(new_user)
             db.session.commit()
 
-            return username_schema.dump(new_user), 201
+            created_user = username_schema.dump(new_user)
+            del created_user["password"]
+
+            return created_user, 201
         except Exception as e:
             return str(e), 500
