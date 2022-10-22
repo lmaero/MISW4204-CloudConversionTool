@@ -46,6 +46,8 @@ class VistaSignUp(Resource):
                 return "You should provide a password", 400
             if "email" not in data.keys() and "username" not in data.keys():
                 return "You should provide either an email or an username", 400
+            if db.session.query(Username).filter_by(email=data["email"]).first():
+                return "User already registered, please use another email", 400
 
             new_user = Username(
                 username=data['username'],
