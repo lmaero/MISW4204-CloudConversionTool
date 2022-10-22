@@ -63,6 +63,7 @@ class VistaSignUp(Resource):
             db.session.commit()
 
             created_user = username_schema.dump(new_user)
+            created_user["confirmation"] = "User successfully created"
             del created_user["password"]
 
             return created_user, 201
