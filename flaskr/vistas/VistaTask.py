@@ -51,10 +51,8 @@ class VistaTask(Resource):
     @jwt_required()
     def delete(self, id_task):
         try:
-            task = db.session.query(Task).filter(Task.id==id_task).first()
+            task = db.session.query(Task).filter(Task.id == id_task).first()
             db.session.delete(task)
             db.session.commit()
         except:
             return {"message": "The id provided does not exist in the database"}
-
-    
