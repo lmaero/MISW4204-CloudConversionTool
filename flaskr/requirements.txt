@@ -11,3 +11,4 @@ marshmallow==3.18.0
 marshmallow_sqlalchemy==0.28.1
 flask_cors==3.0.10
 pg8000==1.17.0
+werkzeug==2.2.2
