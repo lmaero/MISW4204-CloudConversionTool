@@ -48,7 +48,7 @@ class VistaTasks(Resource):
         except:
             order = 0
 
-        # Get data from the database
+        # Get data from the database with the needed fields
         results = db.engine.execute(
             "select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status "
             "from username "
