@@ -6,6 +6,7 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
+from general_queue.general_queue import convert_file
 from modelos import db, Task, TaskSchema, File
 
 task_schema = TaskSchema()
@@ -54,6 +55,8 @@ class VistaTask(Resource):
             task.status = "UPLOADED"
             db.session.add(task)
             db.session.commit()
+
+            convert_file(task, file)
 
             return task_schema.dump(task), 200
         except Exception as error:
