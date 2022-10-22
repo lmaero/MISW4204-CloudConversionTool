@@ -4,11 +4,9 @@ RUN addgroup app && adduser -S -G app app
 USER app
 
 WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
+RUN pip install --no-cache-dir -r flaskr/requirements.txt
 
 EXPOSE 6000
 
-ENTRYPOINT [ "python" ]
-CMD ["app.py"]
+CMD ["flask", "--app", "app.py", "run"]
