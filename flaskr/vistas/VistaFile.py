@@ -1,3 +1,4 @@
+from flask import send_file
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
@@ -15,7 +16,7 @@ class VistaFile(Resource):
             file = file_schema.dump(file_query)
 
             if file:
-                return file, 200
+                return send_file(file["location"], as_attachment=True)
             else:
                 return {"message": "There is no filename with this name"}
 
