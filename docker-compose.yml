@@ -3,6 +3,7 @@ volumes:
 
 services:
   db:
+    container_name: db
     image: postgres:latest
     environment:
       - POSTGRES_USER=admin
@@ -14,16 +15,24 @@ services:
       - data:/var/lib/postgresql
 
   api:
+    container_name: api
     build: ./flaskr
     ports:
       - 6000:6000
     environment:
+      - FLASK_DEBUG=1
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - APP_DB_NAME=postgres
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./flaskr:/app
+      - ./files:/app/files
 
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:
@@ -33,3 +42,11 @@ services:
       - 5050:80
     volumes:
       - ./servers.json:/pgadmin4/servers.json
+    depends_on:
+      - db
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
