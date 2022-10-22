@@ -11,9 +11,9 @@ db = SQLAlchemy()
 class Username(db.Model):
     __tablename__ = 'username'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(128))
+    username = db.Column(db.String(128), unique=True, nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    password = db.Column(db.String(128))
+    password = db.Column(db.String(128), nullable=False)
     file = db.relationship('File', backref='username', cascade='all, delete, delete-orphan')
 
 

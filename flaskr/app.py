@@ -6,11 +6,11 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db
+from notificator.Mail import MailNotificator
 from vistas.VistaFile import VistaFile
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
-from notificator.Mail import MailNotificator
 
 app = Flask(__name__)
 
@@ -50,7 +50,6 @@ api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 api.add_resource(VistaFile, '/api/files/<filename>')
 
 notificator = MailNotificator(app)
-notificator.send('camilogalvezv@gmail.com', 'Prueba', 'Super prueba')
 
 jwt = JWTManager(app)
 
