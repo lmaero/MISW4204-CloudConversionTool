@@ -62,7 +62,6 @@ class VistaTasks(Resource):
         tasks_in_db = [row for row in results]
         tasks = []
         for task in tasks_in_db:
-            print(task)
             result = Result(task[0], task[1], task[2], task[5], task[4])
             result_as_dict = result.__dict__
             tasks.append(result_as_dict)
@@ -74,13 +73,13 @@ class VistaTasks(Resource):
             for task in tasks:
                 counter += 1
                 result_list.append(task)
-                if counter == max_number_of_results:
+                if counter == int(max_number_of_results):
                     break
         else:
             for task in tasks[::-1]:
                 counter += 1
                 result_list.append(task)
-                if counter == max_number_of_results:
+                if counter == int(max_number_of_results):
                     break
         return result_list
 
