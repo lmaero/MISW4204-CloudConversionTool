@@ -45,6 +45,10 @@ class VistaSignUp(Resource):
         try:
             if "password" not in data.keys():
                 return "You should provide a password", 400
+            if "password_confirmation" not in data.keys():
+                return "You should provide a confirmation of your password", 400
+            if data["password"] != data["password_confirmation"]:
+                return "Your password does not match, please verify it", 400
             if not password_check(data["password"])[0]:  # Check if password is valid
                 return password_check(data["password"])[1], 400  # Return corresponding validation message
             if "email" not in data.keys() and "username" not in data.keys():
