@@ -1,5 +1,6 @@
 import os
 from os import getcwd
+
 import jwt
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -71,14 +72,14 @@ class VistaTasks(Resource):
         counter = 0
         if order == 0:
             for task in tasks:
-                result_list.append(task)
                 counter += 1
+                result_list.append(task)
                 if counter == max_number_of_results:
                     break
         else:
             for task in tasks[::-1]:
-                result_list.append(task)
                 counter += 1
+                result_list.append(task)
                 if counter == max_number_of_results:
                     break
         return result_list
