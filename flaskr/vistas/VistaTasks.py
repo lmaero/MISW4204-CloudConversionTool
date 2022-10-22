@@ -43,7 +43,7 @@ class VistaTasks(Resource):
         try:
             max_number_of_results = request.headers['Max']
         except:
-            max_number_of_results = 1
+            max_number_of_results = -1
         try:
             order = request.headers['Order']
         except:
