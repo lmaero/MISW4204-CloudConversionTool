@@ -16,7 +16,9 @@ services:
 
   api:
     container_name: api
-    build: ./flaskr
+    image: python:3-alpine
+    working_dir: /app
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && python app.py"
     ports:
       - 6000:6000
     environment:
@@ -29,7 +31,7 @@ services:
       - redis
     volumes:
       - ./flaskr:/app
-      - ./files:/app/files
+      - ./flaskr/files:/app/files
 
   pgadmin:
     container_name: pgadmin
