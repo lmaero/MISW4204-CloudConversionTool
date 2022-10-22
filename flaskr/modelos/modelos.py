@@ -27,7 +27,7 @@ class Username(db.Model):
     username = db.Column(db.String(128))
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128))
-    task = db.relationship('Task', backref='username', cascade='all, delete, delete-orphan')
+    task = db.relationship('Task', backref='username', cascade='all, delete-orphan')
 
 
 class Task(db.Model):
@@ -37,7 +37,7 @@ class Task(db.Model):
     new_format = db.Column(db.String(128))
     status = db.Column(db.String(128))
     timestamp = db.Column(DateTime(timezone=True), default=datetime.now())
-    file = db.relationship('File', cascade='all, delete, delete-orphan')
+    file = db.relationship('File', cascade='all, delete-orphan')
     user = db.Column(db.Integer, db.ForeignKey("username.id"))
 
 
