@@ -124,4 +124,8 @@ class VistaTasks(Resource):
             db.session.commit()
 
             file.save(getcwd() + file.filename)
-            return task_schema.dump(new_task), 201
+
+            created_task = task_schema.dump(new_task)
+            created_task["confirmation"] = "Task was created successfully"
+
+            return created_task, 201
