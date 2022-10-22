@@ -10,6 +10,7 @@ from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaFile import VistaFile
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
+from notificator.Mail import MailNotificator
 
 app = Flask(__name__)
 
@@ -30,39 +31,18 @@ app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'misw4204grupo9@gmail.com'
+app.config['MAIL_PASSWORD'] = 'hbipfeffulmgidkx'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 app_context = app.app_context()
 app_context.push()
 
 db.init_app(app)
 db.create_all()
-
-usuario = Username(username='alonso', email='a.cantu@uniandes.edu.co', password='1234')
-db.session.add(usuario)
-db.session.commit()
-
-archivo = File(filename='file', extension='mp3', location="home", user=usuario.id)
-db.session.add(archivo)
-db.session.commit()
-
-archivo2 = File(filename='file', extension='mp3', location="home", user=usuario.id)
-db.session.add(archivo2)
-db.session.commit()
-
-tarea = Task(original_format='mp3',
-             new_format='mp3',
-             status='uploaded',
-             file=archivo.id)
-db.session.add(tarea)
-db.session.commit()
-
-tarea2 = Task(original_format='aac',
-              new_format='mp3',
-              status='uploaded',
-              file=archivo2.id)
-
-db.session.add(tarea2)
-db.session.commit()
 
 cors = CORS(app)
 
@@ -73,8 +53,11 @@ api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 api.add_resource(VistaFile, '/api/files/<filename>')
 
+notificator = MailNotificator(app)
+notificator.send('camilogalvezv@gmail.com', 'Prueba', 'Super prueba')
+
 jwt = JWTManager(app)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 6000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
