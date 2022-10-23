@@ -19,7 +19,7 @@ class VistaLogin(Resource):
         if data:
             if "password" not in data.keys():
                 return "You should provide a password", 400
-            if "email" not in data.keys() and "username" not in data.keys():
+            if "email" not in data.keys() or "username" not in data.keys():
                 return "You should provide either an email or an username", 400
 
             password = data["password"]
