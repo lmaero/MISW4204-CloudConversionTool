@@ -19,19 +19,18 @@ class VistaLogin(Resource):
         if data:
             if "password" not in data.keys():
                 return "You should provide a password", 400
-            if "email" not in data.keys():
-                return "You should provide either an email or an username", 400
-            if "username" not in data.keys():
-                return "You should provide either an email or an username", 400
+            if ("email" in data.keys()) or ("username" in data.keys()):
+                password = data["password"]
 
-            password = data["password"]
+                if "username" in data.keys():
+                    username = data["username"]
+                    user = Username.query.filter(Username.username == username, Username.password == password).first()
+                else:
+                    email = data["email"]
+                    user = Username.query.filter(Username.email == email, Username.password == password).first()
 
-            if "username" in data.keys():
-                username = data["username"]
-                user = Username.query.filter(Username.username == username, Username.password == password).first()
             else:
-                email = data["email"]
-                user = Username.query.filter(Username.email == email, Username.password == password).first()
+                return "You should provide either an email or an username", 400
 
         if user is None:
             return "User does not exist", 404
