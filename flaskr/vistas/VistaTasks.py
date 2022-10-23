@@ -8,11 +8,10 @@ from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
 from modelos import File, Task, TaskSchema, db, FileSchema
+from utils.utils import ALLOWED_EXTENSIONS
 
 task_schema = TaskSchema()
 file_schema = FileSchema()
-
-ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma'}
 
 
 class Result:

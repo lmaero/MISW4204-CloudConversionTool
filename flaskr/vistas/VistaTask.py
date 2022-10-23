@@ -1,4 +1,3 @@
-import glob
 import os
 from os import getcwd
 
@@ -8,18 +7,9 @@ from flask_restful import Resource
 
 from general_queue.general_queue import convert_file
 from modelos import db, Task, TaskSchema, File
+from utils.utils import ALLOWED_EXTENSIONS
 
 task_schema = TaskSchema()
-
-ALLOWED_EXTENSIONS = {'mp3', 'acc', 'ogg', 'wav', 'wma'}
-
-mp3_files = glob.glob('./*.mp3')
-acc_files = glob.glob('./*.acc')
-ogg_files = glob.glob('./*.ogg')
-wav_files = glob.glob('./*.wav')
-wma_files = glob.glob('./*.wma')
-
-all_files = [mp3_files, acc_files, ogg_files, wav_files, wma_files]
 
 
 class VistaTask(Resource):

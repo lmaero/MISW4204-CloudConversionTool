@@ -29,11 +29,8 @@ class VistaMail(Resource):
         recipient = request.json["recipient"]
         title = request.json["title"]
         message = request.json["message"]
-        print(recipient)
-        print(title)
-        print(message)
-
-        notificator.send(recipient, title, message)
+        resource = request.json["resource"]
+        notificator.send(recipient, title, message, resource)
 
 
 api.add_resource(VistaMail, "/api/mail/send")

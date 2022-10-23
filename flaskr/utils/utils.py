@@ -1,3 +1,6 @@
+ALLOWED_EXTENSIONS = {'mp3', 'ogg', 'flac', 'aiff', 'wav', 'opus'}
+
+
 def password_check(passwd):
     special_sym = ['$', '@', '#', '%']
     is_valid_password = True

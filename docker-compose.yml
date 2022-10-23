@@ -63,5 +63,6 @@ services:
     command: sh -c "pip install --no-cache-dir -r requirements.txt && python3 app.py"
     volumes:
       - ./notificator:/app
+      - ./flaskr/files:/app/files
     environment:
       - FLASK_DEBUG=1

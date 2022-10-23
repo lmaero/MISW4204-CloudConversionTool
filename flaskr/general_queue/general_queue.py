@@ -23,4 +23,4 @@ def convert_file(task, file):
 
     requests.post("http://mail:7000/api/mail/send",
                   json={"recipient": "a.cantu@uniandes.edu.co", "title": "Processed File",
-                        "message": "Your file is ready, download it here"})
+                        "message": "Your file is ready, please find it attached", "resource": file_to_export})
