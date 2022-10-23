@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
+from general_queue.general_queue import convert_file
 from modelos import File, Task, TaskSchema, db, FileSchema
 from utils.utils import ALLOWED_EXTENSIONS
 
@@ -89,6 +90,10 @@ class VistaTasks(Resource):
         decoded_token = jwt.decode(token, "frase-secreta", algorithms=["HS256"])
         user_id = decoded_token["sub"]
 
+        if "new_format" not in request.form:
+            return {"message": "You should provide the new format"}, 400
+        if request.form["new_format"] not in ALLOWED_EXTENSIONS:
+            return {"message": "That's not a valid extension"}, 400
         if 'file' not in request.files:
             return {'message': 'No file part in the request'}, 400
 
@@ -124,6 +129,7 @@ class VistaTasks(Resource):
             db.session.commit()
 
             file.save(getcwd() + file.filename)
+            convert_file(new_task, new_file)
 
             created_task = task_schema.dump(new_task)
             created_task["confirmation"] = "Task was created successfully"
