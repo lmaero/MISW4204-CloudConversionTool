@@ -50,13 +50,13 @@ class VistaTasks(Resource):
 
         # Get data from the database with the needed fields
         results = db.engine.execute(
-            "select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status "
-            "from username "
-            "left join file on username.id=file.user "
-            "left join task on file.id=task.file "
-            "where 1=1 "
-            "and task.original_format <> null "
-            "and username.id = {}".format(user_id)
+            """select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status
+            from username
+            left join file on username.id=file.user
+            left join task on file.id=task.file
+            where 1=1
+            and task.original_format is not null
+            and username.id = {}""".format(user_id)
         )
 
         tasks_in_db = [row for row in results]
