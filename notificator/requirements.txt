@@ -1,0 +1,4 @@
+flask==2.2.2
+requests==2.28.1
+Flask-Mail==0.9.1
+flask-restful==0.3.9
