@@ -55,7 +55,7 @@ class VistaTasks(Resource):
             "left join file on username.id=file.user "
             "left join task on file.id=task.file "
             "where 1=1 "
-            "and task.original_format <> null"
+            "and task.original_format <> null "
             "and username.id = {}".format(user_id)
         )
 
