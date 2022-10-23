@@ -51,7 +51,7 @@ class VistaSignUp(Resource):
                 return "Your password does not match, please verify it", 400
             if not password_check(data["password"])[0]:  # Check if password is valid
                 return password_check(data["password"])[1], 400  # Return corresponding validation message
-            if "email" not in data.keys() and "username" not in data.keys():
+            if "email" not in data.keys() or "username" not in data.keys():
                 return "You should provide either an email or an username", 400
             if db.session.query(Username).filter_by(email=data["email"]).first():
                 return "User already registered, please use another email", 400
