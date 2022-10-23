@@ -58,11 +58,18 @@ class VistaTask(Resource):
             # Delete the task
             task = db.session.query(Task).filter(Task.id == id_task).first()
             db.session.delete(task)
-            db.session.commit()
 
             # Delete the file associated to the task
             file = db.session.query(File).filter(File.id == id_task).first()
             db.session.delete(file)
+
+            # Delete original and processed files
+            original_file_url = getcwd() + "/files/" + file.filename + "." + task.original_format
+            processed_file_url = getcwd() + "/files/" + file.filename + "." + task.new_format
+
+            os.remove(original_file_url)
+            os.remove(processed_file_url)
+
             db.session.commit()
             return {"message": "The task was removed successfully"}
         except:
