@@ -57,20 +57,24 @@ class VistaTask(Resource):
         try:
             # Delete the task
             task = db.session.query(Task).filter(Task.id == id_task).first()
-            db.session.delete(task)
+            if task.status == "PROCESSED":
 
-            # Delete the file associated to the task
-            file = db.session.query(File).filter(File.id == id_task).first()
-            db.session.delete(file)
+                db.session.delete(task)
 
-            # Delete original and processed files
-            original_file_url = getcwd() + "/files/" + file.filename + "." + task.original_format
-            processed_file_url = getcwd() + "/files/" + file.filename + "." + task.new_format
+                # Delete the file associated to the task
+                file = db.session.query(File).filter(File.id == id_task).first()
+                db.session.delete(file)
 
-            os.remove(original_file_url)
-            os.remove(processed_file_url)
+                # Delete original and processed files
+                original_file_url = getcwd() + "/files/" + file.filename + "." + task.original_format
+                processed_file_url = getcwd() + "/files/" + file.filename + "." + task.new_format
 
-            db.session.commit()
-            return {"message": "The task was removed successfully"}
+                os.remove(original_file_url)
+                os.remove(processed_file_url)
+
+                db.session.commit()
+                return {"message": "The task was removed successfully"}
+            else:
+                return {"message": "The file is still being processed"}
         except:
             return {"message": "The id provided does not exist in the database"}, 200
