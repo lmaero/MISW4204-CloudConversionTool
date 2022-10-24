@@ -14,7 +14,7 @@ class MailNotificator(object):
             self.app.config[config.upper()] = value
 
     def send(self, recipient, title, message, resource):
-        msg = Message(title, sender='misw4204grupo9@gmail.com', recipients=[recipient])
+        msg = Message(title, sender='misw4204.grupo09@gmail.com', recipients=[recipient])
         msg.body = message
 
         with self.app.open_resource(resource) as fp:

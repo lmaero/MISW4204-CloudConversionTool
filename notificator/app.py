@@ -10,8 +10,8 @@ app = Flask(__name__)
 FLASK_DEBUG = os.environ.get("FLASK_DEBUG")
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'misw4204grupo9@gmail.com'
-app.config['MAIL_PASSWORD'] = 'hbipfeffulmgidkx'
+app.config['MAIL_USERNAME'] = 'misw4204.grupo09@gmail.com'
+app.config['MAIL_PASSWORD'] = 'mkocehlcafcwufhy'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
