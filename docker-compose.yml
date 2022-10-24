@@ -13,7 +13,9 @@ services:
       - 5432:5432
     volumes:
       - data:/var/lib/postgresql
-
+    cpus: 2
+    mem_limit: 2048M
+  
   api:
     container_name: api
     image: python:3.10.7-slim-buster
@@ -32,6 +34,8 @@ services:
     volumes:
       - ./flaskr:/app
       - ./flaskr/files:/app/files
+    cpus: 2
+    mem_limit: 2048M
 
   nginx:
     container_name: nginx
@@ -42,6 +46,8 @@ services:
       - ./:/etc/nginx/conf.d
     depends_on:
       - api
+    cpus: 2
+    mem_limit: 2048M
 
   pgadmin:
     container_name: pgadmin
@@ -56,12 +62,16 @@ services:
       - ./servers.json:/pgadmin4/servers.json
     depends_on:
       - db
+    cpus: 2
+    mem_limit: 2048M
 
   redis:
     container_name: redis
     image: redis:latest
     ports:
       - 6379:6379
+    cpus: 2
+    mem_limit: 2048M
 
   mail:
     container_name: mail
@@ -75,3 +85,5 @@ services:
       - ./flaskr/files:/app/files
     environment:
       - FLASK_DEBUG=1
+    cpus: 2
+    mem_limit: 2048M
