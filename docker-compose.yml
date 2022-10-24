@@ -16,10 +16,9 @@ services:
 
   api:
     container_name: api
-    image: ubuntu:latest
+    image: python:3.10.7-slim-buster
     working_dir: /app
-    command: sh -c "apt-get update && apt-get install -y ffmpeg python3 python3-pip\
-      && pip install --no-cache-dir -r requirements.txt && python3 app.py"
+    command: ./api-init.sh
     ports:
       - 6000:6000
     environment:
@@ -34,20 +33,15 @@ services:
       - ./flaskr:/app
       - ./flaskr/files:/app/files
 
-  web:
-    build:
-      context: ./services/web
-      dockerfile: Dockerfile.prod
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
-    ports:
-      - 5000:5000
-  
   nginx:
-    build: ./services/nginx
+    container_name: nginx
+    image: nginx:1.23-alpine
     ports:
-      - 1337:80
+      - 6500:80
+    volumes:
+      - ./:/etc/nginx/conf.d
     depends_on:
-      - web
+      - api
 
   pgadmin:
     container_name: pgadmin
