@@ -9,6 +9,10 @@
 
 ## Evidencia del experimento
 
+### Video de presentación del proyecto y resultados obtenidos
+https://user-images.githubusercontent.com/60992168/197699442-23ed543f-9090-4360-86d1-5e3decbd90a8.mp4
+
+
 ### Video paso a paso de reproducción del experimento
 https://user-images.githubusercontent.com/60992168/197675090-523880f7-7e58-440d-981f-485d6432b4da.mp4
 
