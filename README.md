@@ -9,6 +9,10 @@
 
 ## Evidencia del experimento
 
+### Video paso a paso de reproducción del experimento
+https://user-images.githubusercontent.com/60992168/197675090-523880f7-7e58-440d-981f-485d6432b4da.mp4
+
+
 ### Paso a paso de reproducción del experimento
 
 Para la ejecución correcta de los siguientes pasos, se espera que usted como usuario tenga instaladas las herramientas
