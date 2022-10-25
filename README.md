@@ -51,6 +51,8 @@ necesarias en su máquina local: git, Docker, Postman. Así mismo se espera que 
 5. En este punto todos los servicios estarán disponibles y puede continuar la ejecución de las pruebas de Postman,
    relacionadas a continuación. Si tiene Docker Desktop instalado, puede verificar el estado de los servicios tal como
    se muestra en la imagen a continuación:
+   
+   ![Screenshot from 2022-10-24 20-58-04](https://user-images.githubusercontent.com/60992168/197670599-a2505ca3-6e28-4616-8181-3339671771d5.png)
    <br/>
    <br/>
    **Nota:** En caso que desee repetir las pruebas recuerde reiniciar los contenedores, eliminándolos con el comando a
