@@ -1,7 +1,24 @@
 volumes:
   data:
+  files:
 
 services:
+  converter:
+    container_name: converter
+    image: python:3.10.7-slim-buster
+    working_dir: /app
+    command: ./converter-init.sh
+    ports:
+      - 8000:8000
+    volumes:
+      - ./converter:/app
+      - files:/app/files
+    cpus: 2
+    mem_limit: 2048M
+    environment:
+      - FLASK_DEBUG=1
+      - PORT=8000
+
   db:
     container_name: db
     image: postgres:latest
@@ -15,7 +32,7 @@ services:
       - data:/var/lib/postgresql
     cpus: 2
     mem_limit: 2048M
-  
+
   api:
     container_name: api
     image: python:3.10.7-slim-buster
@@ -33,7 +50,7 @@ services:
       - redis
     volumes:
       - ./flaskr:/app
-      - ./flaskr/files:/app/files
+      - files:/app/files
     cpus: 2
     mem_limit: 2048M
 
@@ -46,22 +63,6 @@ services:
       - ./:/etc/nginx/conf.d
     depends_on:
       - api
-    cpus: 2
-    mem_limit: 2048M
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - 5050:80
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json
-    depends_on:
-      - db
     cpus: 2
     mem_limit: 2048M
 
@@ -82,7 +83,7 @@ services:
     command: sh -c "pip install --no-cache-dir -r requirements.txt && python3 app.py"
     volumes:
       - ./notificator:/app
-      - ./flaskr/files:/app/files
+      - files:/app/files
     environment:
       - FLASK_DEBUG=1
     cpus: 2

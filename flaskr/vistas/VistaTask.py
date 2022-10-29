@@ -1,15 +1,17 @@
 import os
 from os import getcwd
 
+import requests
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
-from general_queue.general_queue import convert_file
-from modelos import db, Task, TaskSchema, File
+from modelos import db, Task, TaskSchema, File, Username, FileSchema, UsernameSchema
 from utils.utils import ALLOWED_EXTENSIONS
 
 task_schema = TaskSchema()
+file_schema = FileSchema()
+username_schema = UsernameSchema()
 
 
 class VistaTask(Resource):
@@ -33,6 +35,7 @@ class VistaTask(Resource):
         try:
             task = Task.query.get_or_404(id_task)
             file = db.session.query(File).filter(File.id == task.file).first()
+            user = db.session.query(Username).filter_by(id=file.user).first()
             processed_file_url = getcwd() + "/files/" + file.filename + "." + task.new_format
 
             if task.status == "PROCESSED":
@@ -46,7 +49,13 @@ class VistaTask(Resource):
             db.session.add(task)
             db.session.commit()
 
-            convert_file(task, file)
+            requests.post("http://converter:8000/api/converter",
+                          json={"task": task_schema.dump(task), "user": username_schema.dump(user),
+                                "file": file_schema.dump(file)})
+
+            task.status = "PROCESSED"
+            db.session.add(task)
+            db.session.commit()
 
             return task_schema.dump(task), 200
         except Exception as error:
