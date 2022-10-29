@@ -9,13 +9,15 @@ pip install --no-cache-dir -r requirements.txt
 set -eo pipefail
 
 # Create mount directory for service.
-mkdir -p $MNT_DIR
+mkdir -p "$MNT_DIR"
+chmod 777 "$MNT_DIR"
 
 echo "Mounting Cloud Filestore."
 
-echo $FILESTORE_IP_ADDRESS
-echo $FILE_SHARE_NAME
-echo $MNT_DIR
+echo "$FILESTORE_IP_ADDRESS"
+echo "$FILE_SHARE_NAME"
+# shellcheck disable=SC2086
+echo "$MNT_DIR"
 
 mount -o nolock $FILESTORE_IP_ADDRESS:/$FILE_SHARE_NAME $MNT_DIR
 echo "Mounting completed."

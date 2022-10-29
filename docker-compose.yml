@@ -21,6 +21,7 @@ services:
       - MNT_DIR=/mnt/nfs/filestore
       - FILESTORE_IP_ADDRESS=10.59.173.218
       - FILE_SHARE_NAME=vol1
+    privileged: true
 
   api:
     container_name: api
@@ -44,6 +45,7 @@ services:
       - files:/app/files
     cpus: 2
     mem_limit: 2048M
+    privileged: true
 
   nginx:
     container_name: nginx
