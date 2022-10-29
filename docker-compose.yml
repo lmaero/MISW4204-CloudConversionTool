@@ -18,6 +18,9 @@ services:
     environment:
       - FLASK_DEBUG=1
       - PORT=8000
+      - MNT_DIR=/mnt/nfs/filestore
+      - FILESTORE_IP_ADDRESS=10.59.173.218
+      - FILE_SHARE_NAME=vol1
 
   api:
     container_name: api
@@ -31,6 +34,9 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - APP_DB_NAME=postgres
+      - MNT_DIR=/mnt/nfs/filestore
+      - FILESTORE_IP_ADDRESS=10.59.173.218
+      - FILE_SHARE_NAME=vol1
     depends_on:
       - redis
     volumes:
