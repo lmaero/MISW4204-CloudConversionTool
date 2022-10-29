@@ -5,79 +5,18 @@ volumes:
 services:
   converter:
     container_name: converter
-    image: python:3.10.7-slim-buster
-    working_dir: /app
-    command: ./converter-init.sh
+    build: ./converter
+    privileged: true
     ports:
       - 8000:8000
     volumes:
-      - ./converter:/app
       - files:/app/files
-    cpus: 2
-    mem_limit: 2048M
-    environment:
-      - FLASK_DEBUG=1
-      - PORT=8000
-      - MNT_DIR=/mnt/nfs/filestore
-      - FILESTORE_IP_ADDRESS=10.59.173.218
-      - FILE_SHARE_NAME=vol1
-    privileged: true
 
   api:
     container_name: api
-    image: python:3.10.7-slim-buster
-    working_dir: /app
-    command: ./api-init.sh
-    ports:
-      - 6000:6000
-    environment:
-      - FLASK_DEBUG=1
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - APP_DB_NAME=postgres
-      - MNT_DIR=/mnt/nfs/filestore
-      - FILESTORE_IP_ADDRESS=10.59.173.218
-      - FILE_SHARE_NAME=vol1
-    depends_on:
-      - redis
-    volumes:
-      - ./flaskr:/app
-      - files:/app/files
-    cpus: 2
-    mem_limit: 2048M
+    build: ./flaskr
     privileged: true
-
-  nginx:
-    container_name: nginx
-    image: nginx:1.23-alpine
     ports:
-      - 6500:80
+      - 6000:80
     volumes:
-      - ./:/etc/nginx/conf.d
-    depends_on:
-      - api
-    cpus: 2
-    mem_limit: 2048M
-
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - 6379:6379
-    cpus: 2
-    mem_limit: 2048M
-
-  mail:
-    container_name: mail
-    image: python:3-alpine
-    ports:
-      - 7000:7000
-    working_dir: /app
-    command: sh -c "pip install --no-cache-dir -r requirements.txt && python3 app.py"
-    volumes:
-      - ./notificator:/app
       - files:/app/files
-    environment:
-      - FLASK_DEBUG=1
-    cpus: 2
-    mem_limit: 2048M

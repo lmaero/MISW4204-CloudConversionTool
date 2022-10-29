@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get update
-apt-get install -y ffmpeg netcat tini nfs-common
+apt-get install -y ffmpeg netcat tini nfs-common lsb-release redis
 pip install --upgrade pip
 pip install --no-cache-dir -r requirements.txt
 
@@ -17,7 +17,7 @@ echo "$FILESTORE_IP_ADDRESS"
 echo "$FILE_SHARE_NAME"
 echo "$MNT_DIR"
 
-mount -o nolock $FILESTORE_IP_ADDRESS:/$FILE_SHARE_NAME $MNT_DIR
+# mount -o nolock $FILESTORE_IP_ADDRESS:/$FILE_SHARE_NAME $MNT_DIR
 echo "Mounting completed."
 
 # Run the web service on container startup. Here we use the gunicorn
