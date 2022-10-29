@@ -52,7 +52,7 @@ class VistaTasks(Resource):
         # Get data from the database with the needed fields
         results = db.engine.execute("""select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status
             from username
-            left join file on username.id=file.user
+            left join file on username.id=file.user_id
             left join task on file.id=task.file
             where 1=1
             and task.original_format is not null
@@ -107,7 +107,7 @@ class VistaTasks(Resource):
 
             file.save(file_original)
 
-            new_file = File(filename=filename, extension=file_extension, location=file_original, user=user_id)
+            new_file = File(filename=filename, extension=file_extension, location=file_original, user_id=user_id)
 
             db.session.add(new_file)
             db.session.commit()
@@ -119,7 +119,7 @@ class VistaTasks(Resource):
             db.session.commit()
 
             file.save(getcwd() + file.filename)
-            user = db.session.query(Username).filter_by(id=new_file.user).first()
+            user = db.session.query(Username).filter_by(id=new_file.user_id).first()
 
             requests.post("http://converter:8000/api/converter",
                           json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),

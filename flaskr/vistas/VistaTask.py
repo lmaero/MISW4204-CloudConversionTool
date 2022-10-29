@@ -35,7 +35,7 @@ class VistaTask(Resource):
         try:
             task = Task.query.get_or_404(id_task)
             file = db.session.query(File).filter(File.id == task.file).first()
-            user = db.session.query(Username).filter_by(id=file.user).first()
+            user = db.session.query(Username).filter_by(id=file.user_id).first()
             processed_file_url = getcwd() + "/files/" + file.filename + "." + task.new_format
 
             if task.status == "PROCESSED":

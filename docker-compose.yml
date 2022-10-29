@@ -19,20 +19,6 @@ services:
       - FLASK_DEBUG=1
       - PORT=8000
 
-  db:
-    container_name: db
-    image: postgres:latest
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - APP_DB_NAME=postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - data:/var/lib/postgresql
-    cpus: 2
-    mem_limit: 2048M
-
   api:
     container_name: api
     image: python:3.10.7-slim-buster
@@ -46,7 +32,6 @@ services:
       - POSTGRES_PASSWORD=admin
       - APP_DB_NAME=postgres
     depends_on:
-      - db
       - redis
     volumes:
       - ./flaskr:/app
