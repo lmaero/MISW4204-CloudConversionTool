@@ -15,6 +15,8 @@ COPY . .
 
 EXPOSE 80
 
+VOLUME /app/files
+
 ENV FLASK_DEBUG=1\
     PORT=6000\
     POSTGRES_USER=postgres\

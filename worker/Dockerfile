@@ -13,6 +13,8 @@ COPY . .
 
 EXPOSE 8000
 
+VOLUME /app/files
+
 ENV FLASK_DEBUG=1\
     PORT=8000
 

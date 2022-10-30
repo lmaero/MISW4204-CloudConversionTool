@@ -4,8 +4,8 @@ volumes:
 
 services:
   converter:
-    container_name: converter
-    build: ./converter
+    container_name: worker
+    build: ./worker
     privileged: true
     ports:
       - 8000:8000
@@ -14,7 +14,7 @@ services:
 
   api:
     container_name: api
-    build: ./flaskr
+    build: ./web-server
     privileged: true
     ports:
       - 6000:80
