@@ -8,6 +8,7 @@ from flask_restful import Resource
 
 from modelos import db, Task, TaskSchema, File, Username, FileSchema, UsernameSchema
 from utils.utils import ALLOWED_EXTENSIONS
+from vistas.VistaTasks import CONVERTER_IP, CONVERTER_PORT
 
 task_schema = TaskSchema()
 file_schema = FileSchema()
@@ -49,7 +50,7 @@ class VistaTask(Resource):
             db.session.add(task)
             db.session.commit()
 
-            requests.post("http://converter:8000/api/converter",
+            requests.post("http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT),
                           json={"task": task_schema.dump(task), "user": username_schema.dump(user),
                                 "file": file_schema.dump(file)})
 

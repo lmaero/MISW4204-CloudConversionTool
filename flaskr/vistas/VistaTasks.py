@@ -15,6 +15,9 @@ task_schema = TaskSchema()
 file_schema = FileSchema()
 username_schema = UsernameSchema()
 
+CONVERTER_PORT = os.environ.get("CONVERTER_PORT")
+CONVERTER_IP = os.environ.get("CONVERTER_IP")
+
 
 class Result:
     def __init__(self, id, original_format, new_format, status, filename):
@@ -121,7 +124,7 @@ class VistaTasks(Resource):
             file.save(getcwd() + file.filename)
             user = db.session.query(Username).filter_by(id=new_file.user_id).first()
 
-            requests.post("http://converter:8000/api/converter",
+            requests.post("http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT),
                           json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
                                 "file": file_schema.dump(new_file)})
 
