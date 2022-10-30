@@ -14,8 +14,13 @@ from vistas.VistaTasks import VistaTasks
 app = Flask(__name__)
 
 FLASK_DEBUG = os.environ.get("FLASK_DEBUG")
+DB_USER = os.environ.get("POSTGRES_USER")
+DB_PASS = os.environ.get("POSTGRES_PASSWORD")
+DB_NAME = os.environ.get("POSTGRES_DB_NAME")
+SQL_INSTANCE = os.environ.get("SQL_INSTANCE")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:postgres@34.136.115.126/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, SQL_INSTANCE,
+                                                                                 DB_NAME)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True

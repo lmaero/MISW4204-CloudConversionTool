@@ -1,22 +1,26 @@
-FROM python:3.10.7-slim-buster
+FROM python:3-slim
 
 WORKDIR /app
+COPY requirements.txt nginx.conf ./
+
+RUN set -e && \
+    apt-get update && apt-get install nginx ufw -y && \
+    ufw allow 6000 && \
+    ufw allow 80 && \
+    mv ./nginx.conf /etc/nginx/nginx.conf && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 COPY . .
-RUN ["mkdir","-p","/etc/nginx/conf.d"]
-RUN ["mv","./nginx.conf", "/etc/nginx/conf.d/nginx.conf"]
 
 EXPOSE 80
 
-VOLUME /app
-VOLUME /app/files
-
 ENV FLASK_DEBUG=1\
-    POSTGRES_USER=admin\
-    POSTGRES_PASSWORD=admin\
-    APP_DB_NAME=postgres\
-    MNT_DIR=/mnt/nfs/filestore\
-    FILESTORE_IP_ADDRESS=10.59.173.218\
-    FILE_SHARE_NAME=vol1
+    PORT=6000\
+    POSTGRES_USER=postgres\
+    POSTGRES_PASSWORD=postgres\
+    POSTGRES_DB_NAME=postgres\
+    SQL_INSTANCE=34.136.115.126
 
-CMD ["sh","-c","./api-init.sh"]
+CMD service nginx start && \
+    exec gunicorn --log-level DEBUG --bind 0.0.0.0:$PORT --workers 3 --threads 8 --timeout 120 --preload wsgi:app
