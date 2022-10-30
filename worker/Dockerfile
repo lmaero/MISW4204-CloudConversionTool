@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt ./
 
 RUN set -e && \
-    apt-get update && apt-get install -y ffmpeg netcat lsb-release redis ufw && \
+    apt-get update && apt-get install -y ffmpeg netcat lsb-release redis ufw nano nfs-common && \
     ufw allow 8000 && \
     pip install --upgrade pip && \
     pip install -r requirements.txt

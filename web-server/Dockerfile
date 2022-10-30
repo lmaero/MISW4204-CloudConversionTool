@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt nginx.conf ./
 
 RUN set -e && \
-    apt-get update && apt-get install nginx ufw -y && \
+    apt-get update && apt-get install -y nginx ufw nano nfs-common && \
     ufw allow 6000 && \
     ufw allow 80 && \
     mv ./nginx.conf /etc/nginx/nginx.conf && \
