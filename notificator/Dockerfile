@@ -19,4 +19,4 @@ ENV FLASK_DEBUG=1\
     NOTIFICATOR_IP=10.128.0.10\
     NOTIFICATOR_PORT=7000
 
-CMD exec flask run --port=7000
+CMD exec flask run --host=0.0.0.0 --port=7000
