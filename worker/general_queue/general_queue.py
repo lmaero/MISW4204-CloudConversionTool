@@ -1,5 +1,11 @@
+import os
+
+import requests
 from celery import Celery
 from pydub import AudioSegment
+
+NOTIFICATOR_PORT = os.environ.get("NOTIFICATOR_PORT")
+NOTIFICATOR_IP = os.environ.get("NOTIFICATOR_IP")
 
 celery_app = Celery(__name__, broker='redis://localhost:6379/0')
 
@@ -15,6 +21,6 @@ def convert_file(task, file, user):
     except BaseException as error:
         print(error)
 
-    # requests.post("http://mail:7000/api/mail/send", json={"recipient": user["email"], "title": "Processed File",
-    #                                                       "message": "Your file is ready, please find it attached",
-    #                                                       "resource": file_to_export})
+    requests.post("http://{}:{}/api/mail/send".format(NOTIFICATOR_IP, NOTIFICATOR_PORT),
+                  json={"recipient": user["email"], "title": "Processed File",
+                        "message": "Your file is ready, please find it attached", "resource": file_to_export})
