@@ -22,7 +22,9 @@ ENV FLASK_DEBUG=1\
     POSTGRES_USER=postgres\
     POSTGRES_PASSWORD=postgres\
     POSTGRES_DB_NAME=postgres\
-    SQL_INSTANCE=34.136.115.126
+    SQL_INSTANCE=34.136.115.126 \
+    CONVERTER_IP=10.128.0.8 \
+    CONVERTER_PORT=8000
 
 CMD service nginx start && \
     exec gunicorn --log-level DEBUG --bind 0.0.0.0:$PORT --workers 3 --threads 8 --timeout 120 --preload wsgi:app
