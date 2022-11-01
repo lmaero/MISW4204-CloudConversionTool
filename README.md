@@ -7,7 +7,7 @@
 - Alonso Daniel Cantú Trejo
 - Luis Miguel Guzmán Pérez
 
-## Evidencia del experimento despliegue básico en nube pública - Entrega 2
+## Despliegue básico en nube pública - Entrega 2
 
 ### Video de presentación del proyecto y resultados obtenidos
 
@@ -19,18 +19,33 @@ Cloud Console.
 
 1. Ingresar a [Google Cloud Console](https://console.cloud.google.com), seleccione el proyecto **misw4204-grupo9** y
    abra el módulo Compute Engine - VM Instances. Verá la imagen a continuación con las instancias ejecutándose. En caso
-   que no estén en ejecución, seleccionelas todas y presione el botón **Start** en el menú superior. En la segunda
-   imagen se muestra la instancia de SQL que está en una cuenta distinta de Google Cloud, debe estar en ejecución junto
-   con el web-server, worker, nfs-server y notificator.
+   que no estén en ejecución, seleccionelas todas y presione el botón **Start** en el menú superior. 
+   
+   - En la primera imagen se muestran las VM instances del web-server, worker, nfs-server y notificator.
+   ![Screenshot from 2022-10-31 21-59-48](https://user-images.githubusercontent.com/60992168/199153015-cb09f8d0-d6f9-420e-bffd-889cc74d5cef.png)
+
+   - En la segunda imagen se muestra la instancia de SQL que está en una cuenta distinta de Google Cloud.
+   ![SQLInstance](https://user-images.githubusercontent.com/60992168/199153040-f360a9ad-7e6a-4265-9fb6-783419d59991.jpeg)
+   
+   - En la tercera imagen se muestra la instancia usada para ejecutar pruebas de estrés con JMeter
+   ![JMeter](https://user-images.githubusercontent.com/60992168/199153137-b856a885-d8f4-45bf-9afb-cbeea950a514.jpeg)
 
 2. Las instancias están configuradas para ejecutar los servicios haciendo uso de contenedores de Docker, abra una
    conexión SSH a cada una y verifique que se estén ejecutando correctamente con el siguiente comando.
    ```shell
    sudo docker ps -a
    ```
+   
+   - NFS Server (reglas de firewall) y notificator (Docker container - estado)
+   ![Screenshot from 2022-10-31 22-16-13](https://user-images.githubusercontent.com/60992168/199153205-7b087d76-575c-48e4-8469-7f98c02d1c39.png)
 
-3. En caso que alguno de los servicios contenerizados (web-server, worker, notificator) no se esté ejecutando, iniciélos
-   con los respectivos comandos a continuación:
+   - web-server (Docker container - estado) y worker (Docker container - estado)
+   ![Screenshot from 2022-10-31 22-16-41](https://user-images.githubusercontent.com/60992168/199153372-ea7663ee-2a2c-4348-a6a4-0ff8caba6e33.png)
+
+3. En caso que alguno de los servicios contenerizados (web-server, worker, notificator) no se esté ejecutando:
+   ![Screenshot from 2022-10-31 22-17-39](https://user-images.githubusercontent.com/60992168/199153519-4ea6ca20-bb51-460a-86cf-77d213698c7c.png)
+
+   Iniciélos con los respectivos comandos a continuación:
 
     - web-server:
    ```shell
@@ -50,6 +65,8 @@ Cloud Console.
 4. El resultado de la ejecución de los comandos anteriores es el retorno del identificador del contenedor creado.
    Permita que los contenedores inicien sus servicios, este proceso tardará aproximadamente 1 minuto. Ejecute el comando
    del paso 3 nuevamente para verificar la correcta ejecución.
+   
+   ![Screenshot from 2022-10-31 22-21-50](https://user-images.githubusercontent.com/60992168/199153459-197f998b-10c1-4964-9c5c-a658de2b0d88.png)
 
 5. Ejecute las colecciones de Postman a continuación.
 
