@@ -1,89 +1,22 @@
 volumes:
   data:
+  files:
 
 services:
-  db:
-    container_name: db
-    image: postgres:latest
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - APP_DB_NAME=postgres
+  converter:
+    container_name: worker
+    build: ./worker
+    privileged: true
     ports:
-      - 5432:5432
+      - 8000:8000
     volumes:
-      - data:/var/lib/postgresql
-    cpus: 2
-    mem_limit: 2048M
-  
+      - files:/app/files
+
   api:
     container_name: api
-    image: python:3.10.7-slim-buster
-    working_dir: /app
-    command: ./api-init.sh
+    build: ./web-server
+    privileged: true
     ports:
-      - 6000:6000
-    environment:
-      - FLASK_DEBUG=1
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - APP_DB_NAME=postgres
-    depends_on:
-      - db
-      - redis
+      - 6000:80
     volumes:
-      - ./flaskr:/app
-      - ./flaskr/files:/app/files
-    cpus: 2
-    mem_limit: 2048M
-
-  nginx:
-    container_name: nginx
-    image: nginx:1.23-alpine
-    ports:
-      - 6500:80
-    volumes:
-      - ./:/etc/nginx/conf.d
-    depends_on:
-      - api
-    cpus: 2
-    mem_limit: 2048M
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - 5050:80
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json
-    depends_on:
-      - db
-    cpus: 2
-    mem_limit: 2048M
-
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - 6379:6379
-    cpus: 2
-    mem_limit: 2048M
-
-  mail:
-    container_name: mail
-    image: python:3-alpine
-    ports:
-      - 7000:7000
-    working_dir: /app
-    command: sh -c "pip install --no-cache-dir -r requirements.txt && python3 app.py"
-    volumes:
-      - ./notificator:/app
-      - ./flaskr/files:/app/files
-    environment:
-      - FLASK_DEBUG=1
-    cpus: 2
-    mem_limit: 2048M
+      - files:/app/files

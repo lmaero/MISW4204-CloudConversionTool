@@ -2,17 +2,21 @@ import os
 from os import getcwd
 
 import jwt
+import requests
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
-from general_queue.general_queue import convert_file
-from modelos import File, Task, TaskSchema, db, FileSchema
+from modelos import File, Task, TaskSchema, db, FileSchema, Username, UsernameSchema
 from utils.utils import ALLOWED_EXTENSIONS
 
 task_schema = TaskSchema()
 file_schema = FileSchema()
+username_schema = UsernameSchema()
+
+CONVERTER_PORT = os.environ.get("CONVERTER_PORT")
+CONVERTER_IP = os.environ.get("CONVERTER_IP")
 
 
 class Result:
@@ -25,8 +29,7 @@ class Result:
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 class VistaTasks(Resource):
@@ -50,15 +53,13 @@ class VistaTasks(Resource):
             order = 0
 
         # Get data from the database with the needed fields
-        results = db.engine.execute(
-            """select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status
+        results = db.engine.execute("""select task.id, task.original_format, task.new_format, task.timestamp, file.filename, task.status
             from username
-            left join file on username.id=file.user
+            left join file on username.id=file.user_id
             left join task on file.id=task.file
             where 1=1
             and task.original_format is not null
-            and username.id = {}""".format(user_id)
-        )
+            and username.id = {}""".format(user_id))
 
         tasks_in_db = [row for row in results]
         tasks = []
@@ -105,34 +106,34 @@ class VistaTasks(Resource):
             sec_filename = secure_filename(file.filename)
             filename = os.path.splitext(sec_filename)[0]
             file_extension = os.path.splitext(sec_filename)[1].split(".")[1]
-            file_original = getcwd() + "/files/" + sec_filename
+            file_original = "/app/files/" + sec_filename
+
             file.save(file_original)
 
-            new_file = File(
-                filename=filename,
-                extension=file_extension,
-                location=file_original,
-                user=user_id
-            )
+            new_file = File(filename=filename, extension=file_extension, location=file_original, user_id=user_id)
 
             db.session.add(new_file)
             db.session.commit()
 
-            new_task = Task(
-                original_format=file_extension,
-                new_format=request.form["new_format"],
-                status="UPLOADED",
-                file=new_file.id
-            )
+            new_task = Task(original_format=file_extension, new_format=request.form["new_format"], status="UPLOADED",
+                            file=new_file.id)
 
             db.session.add(new_task)
             db.session.commit()
 
             file.save(getcwd() + file.filename)
-            convert_file(new_task, new_file)
+            user = db.session.query(Username).filter_by(id=new_file.user_id).first()
+
+            requests.post("http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT),
+                          json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
+                                "file": file_schema.dump(new_file)})
 
             created_task = task_schema.dump(new_task)
             created_task["confirmation"] = "Task was created successfully"
+
+            new_task.status = "PROCESSED"
+            db.session.add(new_task)
+            db.session.commit()
 
             return created_task, 201
         else:

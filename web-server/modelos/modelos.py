@@ -24,7 +24,7 @@ class File(db.Model):
     extension = db.Column(db.String(1000))
     location = db.Column(db.String(1000))
     task = db.relationship('Task', cascade='all, delete, delete-orphan')
-    user = db.Column(db.Integer, db.ForeignKey("username.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("username.id"))
 
 
 class Task(db.Model):
