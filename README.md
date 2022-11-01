@@ -12,6 +12,8 @@
 ### Video de presentación del proyecto y resultados obtenidos
 
 ### Paso a paso de reproducción del experimento
+https://user-images.githubusercontent.com/60992168/199161568-d737829c-62dd-4739-98d3-d8606ed7d13f.mp4
+
 
 Para la ejecución correcta de los siguientes pasos, se espera que usted como usuario tenga instaladas las herramientas
 necesarias en su máquina local: Postman. Así mismo se espera que tenga conocimientos de uso de la terminal y de Google
