@@ -10,6 +10,7 @@ from vistas.VistaFile import VistaFile
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
+from vistas.VistaHealthCheck import VistaHealthCheck
 
 app = Flask(__name__)
 
@@ -35,6 +36,7 @@ db.create_all()
 cors = CORS(app)
 
 api = Api(app)
+api.add_resource(VistaHealthCheck, '/')
 api.add_resource(VistaLogin, '/api/auth/login')
 api.add_resource(VistaSignUp, '/api/auth/signup')
 api.add_resource(VistaTasks, '/api/tasks')
