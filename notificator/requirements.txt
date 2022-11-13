@@ -1,3 +1,4 @@
 flask==2.2.2
 flask-restful==0.3.9
 Flask-Mail==0.9.1
+google-cloud-storage==2.6.0

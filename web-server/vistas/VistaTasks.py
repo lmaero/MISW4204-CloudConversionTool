@@ -130,8 +130,9 @@ class VistaTasks(Resource):
 
             user = db.session.query(Username).filter_by(id=new_file.user_id).first()
 
-            post_url = "http://worker:8000/api/converter" if DEV_ENV else "http://{}:{}/api/converter".format(
-                CONVERTER_IP, CONVERTER_PORT)
+            local_post_url = "http://worker:8000/api/converter"
+            external_post_url = "http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT)
+            post_url = local_post_url if DEV_ENV == 0 else external_post_url
 
             requests.post(post_url, json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
                                           "file": file_schema.dump(new_file)})

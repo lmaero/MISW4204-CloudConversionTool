@@ -32,9 +32,9 @@ def convert_file(task, file, user):
     except BaseException as error:
         print(error)
 
-    if not DEV_ENV:
+    if DEV_ENV == 0:
+        return
+    else:
         requests.post("http://{}:{}/api/mail/send".format(NOTIFICATOR_IP, NOTIFICATOR_PORT),
                       json={"recipient": user["email"], "title": "Processed File",
                             "message": "Your file is ready, please find it attached", "resource": file_to_export})
-    else:
-        return

@@ -21,9 +21,12 @@ DB_PASS = os.environ.get("POSTGRES_PASSWORD")
 DB_NAME = os.environ.get("POSTGRES_DB_NAME")
 SQL_INSTANCE = os.environ.get("SQL_INSTANCE")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, "db-local", DB_NAME) \
-    if DEV_ENV else \
-    'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, SQL_INSTANCE, DB_NAME)
+LOCAL_DB_URL = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, "db-local", DB_NAME)
+EXTERNAL_DB_URL = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, SQL_INSTANCE, DB_NAME)
+
+DB_URL = LOCAL_DB_URL if DEV_ENV == 0 else EXTERNAL_DB_URL
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
