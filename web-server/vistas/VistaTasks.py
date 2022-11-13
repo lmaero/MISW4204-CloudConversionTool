@@ -1,11 +1,11 @@
 import os
-from os import getcwd
 
 import jwt
 import requests
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+from google.cloud import storage
 from werkzeug.utils import secure_filename
 
 from modelos import File, Task, TaskSchema, db, FileSchema, Username, UsernameSchema
@@ -17,6 +17,7 @@ username_schema = UsernameSchema()
 
 CONVERTER_PORT = os.environ.get("CONVERTER_PORT")
 CONVERTER_IP = os.environ.get("CONVERTER_IP")
+DEV_ENV = os.environ.get("DEV_ENV")
 
 
 class Result:
@@ -106,7 +107,7 @@ class VistaTasks(Resource):
             sec_filename = secure_filename(file.filename)
             filename = os.path.splitext(sec_filename)[0]
             file_extension = os.path.splitext(sec_filename)[1].split(".")[1]
-            file_original = "/app/files/" + sec_filename
+            file_original = filename + "." + file_extension
 
             file.save(file_original)
 
@@ -121,12 +122,19 @@ class VistaTasks(Resource):
             db.session.add(new_task)
             db.session.commit()
 
-            file.save(getcwd() + file.filename)
+            storage_client = storage.Client(project="misw4204-grupo9")
+            storage_bucket = storage_client.get_bucket("cloud-conversion-tool-bucket")
+
+            blob = storage_bucket.blob(file_original)
+            blob.upload_from_filename(file_original)
+
             user = db.session.query(Username).filter_by(id=new_file.user_id).first()
 
-            requests.post("http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT),
-                          json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
-                                "file": file_schema.dump(new_file)})
+            post_url = "http://worker:8000/api/converter" if DEV_ENV else "http://{}:{}/api/converter".format(
+                CONVERTER_IP, CONVERTER_PORT)
+
+            requests.post(post_url, json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
+                                          "file": file_schema.dump(new_file)})
 
             created_task = task_schema.dump(new_task)
             created_task["confirmation"] = "Task was created successfully"

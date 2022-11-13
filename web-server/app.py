@@ -7,21 +7,24 @@ from flask_restful import Api
 
 from modelos import db
 from vistas.VistaFile import VistaFile
+from vistas.VistaHealthCheck import VistaHealthCheck
 from vistas.VistaLogin import VistaLogin, VistaSignUp
 from vistas.VistaTask import VistaTask
 from vistas.VistaTasks import VistaTasks
-from vistas.VistaHealthCheck import VistaHealthCheck
 
 app = Flask(__name__)
 
 FLASK_DEBUG = os.environ.get("FLASK_DEBUG")
+DEV_ENV = os.environ.get("DEV_ENV")
 DB_USER = os.environ.get("POSTGRES_USER")
 DB_PASS = os.environ.get("POSTGRES_PASSWORD")
 DB_NAME = os.environ.get("POSTGRES_DB_NAME")
 SQL_INSTANCE = os.environ.get("SQL_INSTANCE")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, SQL_INSTANCE,
-                                                                                 DB_NAME)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, "db-local", DB_NAME) \
+    if DEV_ENV else \
+    'postgresql+pg8000://{}:{}@{}/{}'.format(DB_USER, DB_PASS, SQL_INSTANCE, DB_NAME)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True

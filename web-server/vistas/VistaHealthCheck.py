@@ -1,5 +1,6 @@
 from flask_restful import Resource
 
+
 class VistaHealthCheck(Resource):
 
     def get(self):
