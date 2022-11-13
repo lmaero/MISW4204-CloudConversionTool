@@ -1,11 +1,13 @@
 import os
 
+import requests
 from celery import Celery
 from google.cloud import storage
 from pydub import AudioSegment
 
 NOTIFICATOR_PORT = os.environ.get("NOTIFICATOR_PORT")
 NOTIFICATOR_IP = os.environ.get("NOTIFICATOR_IP")
+DEV_ENV = os.environ.get("DEV_ENV")
 
 celery_app = Celery(__name__, broker='redis://localhost:6379/0')
 
@@ -15,18 +17,8 @@ def convert_file(task, file, user):
     storage_client = storage.Client(project="misw4204-grupo9")
     storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
 
-    print(file)
-    print(file["filename"])
-    print(file["extension"])
-
-    filename = file["filename"] + "." + file["extension"]
-    file_to_download = storage_bucket.blob(filename)
-    print(file_to_download)
-
-    downloaded_file = file_to_download.download_to_filename(filename)
-    print(downloaded_file)
-
-    downloaded_file.save()
+    file_to_download = storage_bucket.blob(file["location"])
+    file_to_download.download_to_filename(file["location"])
 
     file_to_process = file["filename"] + "." + file["extension"]
     file_to_export = file["filename"] + "." + task["new_format"]
@@ -40,6 +32,9 @@ def convert_file(task, file, user):
     except BaseException as error:
         print(error)
 
-    # requests.post("http://{}:{}/api/mail/send".format(NOTIFICATOR_IP, NOTIFICATOR_PORT),
-    #               json={"recipient": user["email"], "title": "Processed File",
-    #                     "message": "Your file is ready, please find it attached", "resource": file_to_export})
+    if not DEV_ENV:
+        requests.post("http://{}:{}/api/mail/send".format(NOTIFICATOR_IP, NOTIFICATOR_PORT),
+                      json={"recipient": user["email"], "title": "Processed File",
+                            "message": "Your file is ready, please find it attached", "resource": file_to_export})
+    else:
+        return
