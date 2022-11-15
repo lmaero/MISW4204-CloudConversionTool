@@ -45,7 +45,6 @@ Cloud Console.
 ![InstanceTemplate](https://user-images.githubusercontent.com/26640034/201800709-3af54171-b2a3-48c3-9586-eb04195cfedc.jpg)
 
   - En la séptima imagen se muestra la configuración del Health Checker para verificar el estado de las VM creadas en el instance group y que estas respondan al tráfico de manera correcta.
-
 ![HealthCheck](https://user-images.githubusercontent.com/26640034/201801062-e9b5c31a-4b2d-498d-a149-031b94c284c0.jpg)
 
 - En la octava imagen se muestra la configuración de las imágenes de los discos de arranque para las VM instances de web server creadas en el instance group y que estas se encuentren creadas idénticamente.
