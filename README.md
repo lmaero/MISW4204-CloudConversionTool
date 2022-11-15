@@ -75,17 +75,18 @@ Cloud Console.
 
     - web-server:
    ```shell
-   sudo docker run -d -p 80:80 -v /app/files:/app/files --name web-server lmaerodev/misw4204-cloudconversiontool-web-server:v0.4.0
+   sudo docker run -d -p 80:80 --env DEV_ENV=0 --env SQL_INSTANCE=34.71.15.212 --name web-server lmaerodev/misw4204-cloudconversiontool-web-server:v0.6.0
    ```
+   
 
     - worker:
    ```shell
-   sudo docker run -d -p 8000:8000 -v /app/files:/app/files --env NOTIFICATOR_IP=10.128.0.10 --env NOTIFICATOR_PORT=7000 --name worker lmaerodev/misw4204-cloudconversiontool-worker:v0.4.0
+   sudo docker run -d -p 8000:8000 --env DEV_ENV=0 --env NOTIFICATOR_IP=10.128.0.10 --env NOTIFICATOR_PORT=7000 --name worker lmaerodev/misw4204-cloudconversiontool-worker:v0.5.0
    ```
 
     - notificator:
    ```shell
-   sudo docker run -d -p 7000:7000 -v /app/files:/app/files --name notificator lmaerodev/misw4204-cloudconversiontool-notificator:v0.3.0
+   sudo docker run -d -p 7000:7000 --name notificator lmaerodev/misw4204-cloudconversiontool-notificator:v0.4.0
    ```
 
 4. El resultado de la ejecución de los comandos anteriores es el retorno del identificador del contenedor creado.
