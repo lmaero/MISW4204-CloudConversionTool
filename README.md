@@ -63,11 +63,10 @@ Cloud Console.
    sudo docker ps -a
    ```
    
-   - NFS Server (reglas de firewall) y notificator (Docker container - estado)
-   ![Screenshot from 2022-10-31 22-16-13](https://user-images.githubusercontent.com/60992168/199153205-7b087d76-575c-48e4-8469-7f98c02d1c39.png)
-
    - web-server (Docker container - estado) y worker (Docker container - estado)
-   ![Screenshot from 2022-10-31 22-16-41](https://user-images.githubusercontent.com/60992168/199153372-ea7663ee-2a2c-4348-a6a4-0ff8caba6e33.png)
+    ![WebServer](https://user-images.githubusercontent.com/26640034/201802956-aea1ac79-5597-4226-b1a1-62265451b755.jpg) 
+    ![Worker](https://user-images.githubusercontent.com/26640034/201802990-f6fb6727-d75e-47de-8556-e8f61d239240.jpeg)
+
 
 3. En caso que alguno de los servicios contenerizados (web-server, worker, notificator) no se esté ejecutando:
    ![Screenshot from 2022-10-31 22-17-39](https://user-images.githubusercontent.com/60992168/199153519-4ea6ca20-bb51-460a-86cf-77d213698c7c.png)
