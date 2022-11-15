@@ -53,6 +53,9 @@ Cloud Console.
 - En la novena imagen se muestra la configuración en Cloud Storage para el almacentamiento de los archivos de audio utilizados y que la App pueda acceder a ellos cuando lo necesite. En este caso se llama cloud-conversion-tool-bucket.
 ![ConversionToolBucket](https://user-images.githubusercontent.com/26640034/201801737-ba2dc127-c3eb-46c8-9bb7-e621b29b227e.jpg)
 
+- En la décima imagen se muestra que el proceso de autoescalamiento luego de realizar las pruebas de estrés del web server es satisfactorio. Se crearon dos nuevas instancias luego de copar el 80% de capacidad de la primera creada y luego de copar el 80% de la segunda creada.
+![Autoscaling](https://user-images.githubusercontent.com/26640034/201809051-8c054e89-ed31-4dc5-946e-1c866293d212.jpeg)
+
   
   Es importante mencionar que no se puede configurar el balanceador de cargas sin haber configurado previamente la opción de autoescalamiento.
   
