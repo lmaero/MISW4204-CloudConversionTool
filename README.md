@@ -13,7 +13,6 @@
 ### Video de presentación del proyecto y resultados obtenidos
 
 ### Paso a paso de reproducción del experimento
-*ACA VA VIDEO
 
 
 Para la ejecución correcta de los siguientes pasos, se espera que usted como usuario tenga instaladas las herramientas
