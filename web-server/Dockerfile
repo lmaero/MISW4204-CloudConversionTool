@@ -27,5 +27,5 @@ ENV FLASK_DEBUG=1\
     PYTHONUNBUFFERED=TRUE\
     GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
 
-CMD service nginx start && \
+ENTRYPOINT service nginx start && \
     exec gunicorn --log-level DEBUG --bind 0.0.0.0:$PORT --workers 3 --threads 8 --timeout 120 --preload wsgi:app

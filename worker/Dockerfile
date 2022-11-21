@@ -19,4 +19,4 @@ ENV FLASK_DEBUG=1\
     DEV_ENV=1 \
     GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
 
-CMD exec gunicorn --log-level DEBUG --bind 0.0.0.0:$PORT --workers 3 --threads 8 --timeout 120 --preload wsgi:app
+ENTRYPOINT exec gunicorn --log-level DEBUG --bind 0.0.0.0:$PORT --workers 3 --threads 8 --timeout 120 --preload wsgi:app
