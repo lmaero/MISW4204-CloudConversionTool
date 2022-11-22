@@ -1,7 +1,6 @@
 import os
 
 import requests
-from celery import Celery
 from google.cloud import storage
 from pydub import AudioSegment
 
@@ -9,13 +8,10 @@ NOTIFICATOR_PORT = os.environ.get("NOTIFICATOR_PORT")
 NOTIFICATOR_IP = os.environ.get("NOTIFICATOR_IP")
 DEV_ENV = os.environ.get("DEV_ENV")
 
-celery_app = Celery(__name__, broker='redis://localhost:6379/0')
 
-
-@celery_app.task()
 def convert_file(task, file, user):
-    storage_client = storage.Client(project="misw4204-grupo9")
-    storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
+    storage_client = storage.Client(project="misw4204-grupo9-docker")
+    storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket-docker")
 
     file_to_download = storage_bucket.blob(file["location"])
     file_to_download.download_to_filename(file["location"])

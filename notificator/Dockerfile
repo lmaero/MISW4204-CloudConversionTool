@@ -14,9 +14,7 @@ COPY . .
 EXPOSE 7000
 
 ENV FLASK_DEBUG=1\
-    NOTIFICATOR_IP=10.128.0.10\
-    NOTIFICATOR_PORT=7000\
     PYTHONUNBUFFERED=TRUE\
     GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
 
-CMD exec flask run --host=0.0.0.0 --port=7000
+ENTRYPOINT exec flask run --host=0.0.0.0 --port=7000

@@ -21,8 +21,8 @@ class VistaFile(Resource):
             original_file_name = file["filename"] + "." + file["task"][0]["original_format"]
             processed_file_name = file["filename"] + "." + file["task"][0]["new_format"]
 
-            storage_client = storage.Client(project="misw4204-grupo9")
-            storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
+            storage_client = storage.Client(project="misw4204-grupo9-docker")
+            storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket-docker")
 
             if file:
                 if file_to_download == "original":

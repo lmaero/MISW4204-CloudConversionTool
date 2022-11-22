@@ -1,11 +1,11 @@
+import json
 import os
 
 import jwt
-import requests
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-from google.cloud import storage
+from google.cloud import storage, pubsub_v1
 from werkzeug.utils import secure_filename
 
 from modelos import File, Task, TaskSchema, db, FileSchema, Username, UsernameSchema
@@ -122,20 +122,21 @@ class VistaTasks(Resource):
             db.session.add(new_task)
             db.session.commit()
 
-            storage_client = storage.Client(project="misw4204-grupo9")
-            storage_bucket = storage_client.get_bucket("cloud-conversion-tool-bucket")
+            storage_client = storage.Client(project="misw4204-grupo9-docker")
+            storage_bucket = storage_client.get_bucket("cloud-conversion-tool-bucket-docker")
 
             blob = storage_bucket.blob(file_original)
             blob.upload_from_filename(file_original)
 
             user = db.session.query(Username).filter_by(id=new_file.user_id).first()
 
-            local_post_url = "http://worker:8000/api/converter"
-            external_post_url = "http://{}:{}/api/converter".format(CONVERTER_IP, CONVERTER_PORT)
-            post_url = local_post_url if DEV_ENV == 0 else external_post_url
+            publisher = pubsub_v1.PublisherClient()
+            topic_path = publisher.topic_path("misw4204-grupo9-docker", "converter")
 
-            requests.post(post_url, json={"task": task_schema.dump(new_task), "user": username_schema.dump(user),
-                                          "file": file_schema.dump(new_file)})
+            converter_task = {"task": task_schema.dump(new_task), "user": username_schema.dump(user),
+                              "file": file_schema.dump(new_file)}
+            data = json.dumps(converter_task).encode("utf-8")
+            publisher.publish(topic_path, data)
 
             created_task = task_schema.dump(new_task)
             created_task["confirmation"] = "Task was created successfully"
