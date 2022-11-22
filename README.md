@@ -10,7 +10,7 @@
 ## Sistema de Conversión Cloud - Escalabilidad en el Backend - Entrega 4
 
 ### Video de presentación del proyecto y resultados obtenidos
-https://www.youtube.com/watch?v=9A8-IjI8iGg
+https://youtu.be/pkSRi08S52k
 
 ### Paso a paso de reproducción del experimento
 
