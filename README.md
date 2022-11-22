@@ -46,11 +46,14 @@ Cloud Console.
 ![HealthCheck](https://user-images.githubusercontent.com/26640034/201801062-e9b5c31a-4b2d-498d-a149-031b94c284c0.jpg)
 
 - En la octava imagen se muestra la configuración en Cloud Storage para el almacentamiento de los archivos de audio utilizados y que la App pueda acceder a ellos cuando lo necesite. En este caso se llama cloud-conversion-tool-bucket.
-![ConversionToolBucket](https://user-images.githubusercontent.com/26640034/201801737-ba2dc127-c3eb-46c8-9bb7-e621b29b227e.jpg)
+![Bucket](https://user-images.githubusercontent.com/26640034/203238022-d68f78a7-388f-46a6-9a65-f0ea674fb4ec.png)
+
 
 - En la novena imagen se muestra que el proceso de autoescalamiento para la capa web server y la capa worker luego de realizar las pruebas de estrés del web server es satisfactorio. Se crearon dos nuevas instancias luego de copar el 80% de capacidad de la primera creada y luego de copar el 80% de la segunda creada.
-
 ![AutoscalingProcess](https://user-images.githubusercontent.com/26640034/203233450-2123104c-d7be-4a61-8a84-caf471229737.png)
+
+- En la décima imagen se muestra la implementación del Pub/Sub, como sistema de comunicación entre la capa web server y worker de manera asíncrona. Se muestran los eventos generados en la ejecución de la aplicación.
+![Pub/Sub](https://user-images.githubusercontent.com/26640034/203238097-b978ae56-fac5-46f2-aba6-88e7dd49a75d.png)
 
   
   Es importante mencionar que no se puede configurar el balanceador de cargas sin haber configurado previamente la opción de autoescalamiento. Además, ya bo se está utilizando el disco de arranque con las imágenes para ser utilizado por los instance group, si no las imágenes ahora son almacenadas en contenedores que se ejecutan de maenra automática cuando se realiza el proceso. 
