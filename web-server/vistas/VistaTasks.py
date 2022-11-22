@@ -122,7 +122,7 @@ class VistaTasks(Resource):
             db.session.add(new_task)
             db.session.commit()
 
-            storage_client = storage.Client(project="misw4204-grupo9")
+            storage_client = storage.Client(project="misw4204-grupo9-docker")
             storage_bucket = storage_client.get_bucket("cloud-conversion-tool-bucket")
 
             blob = storage_bucket.blob(file_original)

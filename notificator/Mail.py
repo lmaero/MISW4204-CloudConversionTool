@@ -18,8 +18,8 @@ class MailNotificator(object):
         msg = Message(title, sender='misw4204.grupo09@gmail.com', recipients=[recipient])
         msg.body = message
 
-        storage_client = storage.Client(project="misw4204-grupo9")
-        storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
+        storage_client = storage.Client(project="misw4204-grupo9-docker")
+        storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket-docker")
 
         file_to_download_from_bucket = storage_bucket.blob(resource)
         file_to_download_from_bucket.download_to_filename(resource)

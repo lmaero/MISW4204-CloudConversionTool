@@ -40,8 +40,8 @@ class VistaTask(Resource):
             file = db.session.query(File).filter(File.id == task.file).first()
             user = db.session.query(Username).filter_by(id=file.user_id).first()
 
-            storage_client = storage.Client(project="misw4204-grupo9")
-            storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
+            storage_client = storage.Client(project="misw4204-grupo9-docker")
+            storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket-docker")
 
             processed_file_name = file.filename + "." + task.new_format
             file_from_bucket = storage_bucket.blob(processed_file_name)
@@ -91,8 +91,8 @@ class VistaTask(Resource):
                 original_file_url = file.filename + "." + task.original_format
                 processed_file_url = file.filename + "." + task.new_format
 
-                storage_client = storage.Client(project="misw4204-grupo9")
-                storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket")
+                storage_client = storage.Client(project="misw4204-grupo9-docker")
+                storage_bucket = storage_client.bucket("cloud-conversion-tool-bucket-docker")
 
                 original_from_bucket = storage_bucket.blob(original_file_url)
                 processed_from_bucket = storage_bucket.blob(processed_file_url)
