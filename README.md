@@ -36,7 +36,7 @@ Cloud Console.
    - En la cuarta imagen se muestra la configuración de balanceador de cargas para el web server.
    ![LoadBalancing](https://user-images.githubusercontent.com/26640034/201800251-e8a28720-c0d5-4e2d-b939-7b6c19b0d9ac.jpg)
    
-  - En la quinta imagen se muestra la configuración de las instancias de autoescalamiento a través de un instance group para el web server y la capa worker que permite operar varias VM idénticas.
+  - En la quinta imagen se muestra la configuración de las instancias de autoescalamiento a través de un instance group para el web server y la capa worker que permite operar varias VM idénticas. Eb la capa web server, se desplegaron dos instance group en dos regioens diferentes para beneficiar la disponibilidad. 
 ![InstanceGroups](https://user-images.githubusercontent.com/26640034/203232907-42637224-2627-4450-81f1-af819c6429f7.png)
 
   - En la sexta imagen se muestra la configuración de instance templates para la capa web server y la capa worker, que son las plantillas utilizadas para crear instancias de una VM y un instance group administrado.
@@ -53,7 +53,7 @@ Cloud Console.
 ![AutoscalingProcess](https://user-images.githubusercontent.com/26640034/203233450-2123104c-d7be-4a61-8a84-caf471229737.png)
 
   
-  Es importante mencionar que no se puede configurar el balanceador de cargas sin haber configurado previamente la opción de autoescalamiento. Además, ya bo se está utilizando el disco de arranque con las imágenes para ser utilizado por los instance group, si no las imágenes ahora son almacenadas en contenedores que se ejecutan de maenra automática cuando se realiza el proceso.
+  Es importante mencionar que no se puede configurar el balanceador de cargas sin haber configurado previamente la opción de autoescalamiento. Además, ya bo se está utilizando el disco de arranque con las imágenes para ser utilizado por los instance group, si no las imágenes ahora son almacenadas en contenedores que se ejecutan de maenra automática cuando se realiza el proceso. 
   
   
 2. Las instancias están configuradas para ejecutar los servicios haciendo uso de contenedores de Docker, abra una
@@ -63,7 +63,8 @@ Cloud Console.
    ```
    
    - web-server (Docker container - estado) y worker (Docker container - estado)
-    ![WebServer](https://user-images.githubusercontent.com/26640034/201802956-aea1ac79-5597-4226-b1a1-62265451b755.jpg) 
+
+   ![Webserver](https://user-images.githubusercontent.com/26640034/203234404-dfb72857-24a7-4586-bc8d-32ec5688afd3.png)
     ![Worker](https://user-images.githubusercontent.com/26640034/201802990-f6fb6727-d75e-47de-8556-e8f61d239240.jpeg)
 
 
