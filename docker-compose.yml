@@ -3,20 +3,28 @@ volumes:
   files:
 
 services:
-  converter:
+  worker:
     container_name: worker
     build: ./worker
     privileged: true
     ports:
       - 8000:8000
-    volumes:
-      - files:/app/files
+    depends_on:
+      - db-local
 
-  api:
-    container_name: api
+  web-server:
+    container_name: web-server
     build: ./web-server
     privileged: true
     ports:
       - 6000:80
-    volumes:
-      - files:/app/files
+    depends_on:
+      - db-local
+
+  db-local:
+    container_name: db-local
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB_NAME=postgres
