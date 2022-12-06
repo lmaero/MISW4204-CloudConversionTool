@@ -7,6 +7,137 @@
 - Alonso Daniel Cantú Trejo
 - Luis Miguel Guzmán Pérez
 
+## Sistema de Conversión Cloud - App Engine Despliegue Paas - Entrega 5
+
+### Video de presentación del proyecto y resultados obtenidos
+https://youtu.be/pkSRi08S52k
+
+### Paso a paso de reproducción del experimento
+
+
+Para la ejecución correcta de los siguientes pasos, se espera que usted como usuario tenga instaladas las herramientas
+necesarias en su máquina local: Postman. Así mismo se espera que tenga conocimientos de uso de la terminal y de Google
+Cloud Console.
+
+1. Ingresar a [Google Cloud Console](https://console.cloud.google.com), seleccione el proyecto **misw4204-grupo9** y
+   abra el módulo Compute Engine - VM Instances. Verá la imagen a continuación con las instancias ejecutándose. En caso
+   que no estén en ejecución, seleccionelas todas y presione el botón **Start** en el menú superior. 
+   
+   - En la primera imagen se muestran las VM instances del instance group web server, worker y notificator. Se desactivan las instancias de nfs-server que ahora se encuentra en un Cloud Storage, el web server, que ahora se encuentra como un instance group. El notificator se desactiva temporalmente para la ejecución de las pruebas de carga. 
+   ![VMInsances](https://user-images.githubusercontent.com/26640034/201799917-40be6ff3-3d9f-4312-90e9-edcb6ee20a3c.jpg)
+
+
+   - En la segunda imagen se muestra la instancia de SQL que está en una cuenta distinta de Google Cloud.
+   ![SQLInstance](https://user-images.githubusercontent.com/60992168/199153040-f360a9ad-7e6a-4265-9fb6-783419d59991.jpeg)
+   
+   - En la tercera imagen se muestra la instancia usada para ejecutar pruebas de estrés con JMeter
+   ![JMeter](https://user-images.githubusercontent.com/60992168/199153137-b856a885-d8f4-45bf-9afb-cbeea950a514.jpeg)
+   
+   
+   - En la cuarta imagen se muestra la configuración en Cloud Storage para el almacentamiento de los archivos de audio utilizados y que la App pueda           acceder a ellos cuando lo necesite. En este caso se llama cloud-conversion-tool-bucket.
+   ![Bucket](https://user-images.githubusercontent.com/26640034/203238022-d68f78a7-388f-46a6-9a65-f0ea674fb4ec.png)
+
+
+   - En la quinta imagen se muestra la implementación del Pub/Sub, como sistema de comunicación entre la capa web server y worker de manera asíncrona. Se   muestran los eventos generados en la ejecución de la aplicación.
+   ![Pub/Sub](https://user-images.githubusercontent.com/26640034/203238097-b978ae56-fac5-46f2-aba6-88e7dd49a75d.png)
+   
+   - En la sexta imagen se muestra el App Engine utilizado para el web-server y el worker
+![App engine](https://user-images.githubusercontent.com/26640034/205807141-77cd0729-9270-4192-9d88-e07d55e38d17.jpeg)
+
+  
+  Es importante mencionar que no se puede configurar el balanceador de cargas sin haber configurado previamente la opción de autoescalamiento. Además, ya bo se está utilizando el disco de arranque con las imágenes para ser utilizado por los instance group, si no las imágenes ahora son almacenadas en contenedores que se ejecutan de maenra automática cuando se realiza el proceso. 
+  
+  
+2. Las instancias están configuradas para ejecutar los servicios haciendo uso de contenedores de Docker, abra una
+   conexión SSH a cada una y verifique que se estén ejecutando correctamente con el siguiente comando.
+   ```shell
+   sudo docker ps -a
+   ```
+   
+   - web-server (Docker container - estado) y worker (Docker container - estado)
+
+   ![Webserver](https://user-images.githubusercontent.com/26640034/203234404-dfb72857-24a7-4586-bc8d-32ec5688afd3.png)
+    ![Worker](https://user-images.githubusercontent.com/26640034/201802990-f6fb6727-d75e-47de-8556-e8f61d239240.jpeg)
+
+
+3. En caso que alguno de los servicios contenerizados (web-server, worker, notificator) no se esté ejecutando:
+   ![Screenshot from 2022-10-31 22-17-39](https://user-images.githubusercontent.com/60992168/199153519-4ea6ca20-bb51-460a-86cf-77d213698c7c.png)
+
+   Iniciélos con los respectivos comandos a continuación:
+
+    - web-server:
+   ```shell
+   sudo docker run -d -p 80:80 --env DEV_ENV=0 --env SQL_INSTANCE=34.71.15.212 --name web-server lmaerodev/misw4204-cloudconversiontool-web-server:v0.6.0
+   ```
+   
+
+    - worker:
+   ```shell
+   sudo docker run -d -p 8000:8000 --env DEV_ENV=0 --env NOTIFICATOR_IP=10.128.0.10 --env NOTIFICATOR_PORT=7000 --name worker lmaerodev/misw4204-cloudconversiontool-worker:v0.5.0
+   ```
+
+    - notificator:
+   ```shell
+   sudo docker run -d -p 7000:7000 --name notificator lmaerodev/misw4204-cloudconversiontool-notificator:v0.4.0
+   ```
+
+4. El resultado de la ejecución de los comandos anteriores es el retorno del identificador del contenedor creado.
+   Permita que los contenedores inicien sus servicios, este proceso tardará aproximadamente 1 minuto. Ejecute el comando
+   del paso 3 nuevamente para verificar la correcta ejecución.
+   
+   ![Screenshot from 2022-10-31 22-21-50](https://user-images.githubusercontent.com/60992168/199153459-197f998b-10c1-4964-9c5c-a658de2b0d88.png)
+
+5. Ejecute las colecciones de Postman a continuación.
+
+## Ejecución de solicitudes - Postman
+
+**Nota:** los escenarios están planteados para ser ejecutados una sola vez y en el orden planteado.
+
+### Workspace de Postman - Público
+
+[Postman Workspace](https://www.postman.com/lmaero-pro/workspace/misw4204-conversiontool)
+
+### Colecciones para el Postman runner
+
+Los botones a continuación le permiten hacer fork de las colecciones para ejecutarlas con el runner de Postman.
+Asegúrese de seleccionar el environment GCloud.
+
+Así mismo, en caso de que no desee ejecutarlas, puede verificar los resultados de la ejecución en el siguiente vínculo:
+[Ir a escenarios de prueba ejecutados](https://github.com/lmaero/MISW4204-CloudConversionTool/wiki/Documentaci%C3%B3n-para-Usuarios#pruebas-api-postman)
+
+#### 1 - /auth/signup
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-8e371886-137d-40fd-9ea8-0180a7108975?action=collection%2Ffork&collection-url=entityId%3D16367637-8e371886-137d-40fd-9ea8-0180a7108975%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 2 - /auth/login
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-9de5e6fa-383a-4c06-a8d7-0124cde6a9b0?action=collection%2Ffork&collection-url=entityId%3D16367637-9de5e6fa-383a-4c06-a8d7-0124cde6a9b0%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 3 - /tasks - POST
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-72352066-c2f8-42b4-849c-409c969e853b?action=collection%2Ffork&collection-url=entityId%3D16367637-72352066-c2f8-42b4-849c-409c969e853b%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 4 - /tasks - GET
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-071a172c-d9d0-4d43-873e-cde499236216?action=collection%2Ffork&collection-url=entityId%3D16367637-071a172c-d9d0-4d43-873e-cde499236216%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 5 - /tasks PUT
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-be8674c3-abcd-488e-985f-51a3a05568d1?action=collection%2Ffork&collection-url=entityId%3D16367637-be8674c3-abcd-488e-985f-51a3a05568d1%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 6 - /files GET
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-84c8186c-37da-430c-b03d-47fe016f26ed?action=collection%2Ffork&collection-url=entityId%3D16367637-84c8186c-37da-430c-b03d-47fe016f26ed%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 7 - /mail/send
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-ba57b3a9-b9b5-4bca-83c8-0ab7a44b8477?action=collection%2Ffork&collection-url=entityId%3D16367637-ba57b3a9-b9b5-4bca-83c8-0ab7a44b8477%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+#### 8 - /tasks DELETE
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16367637-e920f4cd-34df-4318-b70e-a359dffdabe4?action=collection%2Ffork&collection-url=entityId%3D16367637-e920f4cd-34df-4318-b70e-a359dffdabe4%26entityType%3Dcollection%26workspaceId%3D5364826e-9d9b-40a6-bcb6-3976c612ccce#?env%5BDocker%5D=W3sia2V5IjoiUE9SVCIsInZhbHVlIjoiNjAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiNjAwMCIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJVUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjAwMC9hcGkiLCJzZXNzaW9uSW5kZXgiOjF9LHsia2V5IjoidmFsaWRfdXNlcm5hbWUiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoidmFsaWRfcGFzc3dvcmQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiIiLCJzZXNzaW9uSW5kZXgiOjN9LHsia2V5IjoicmVxdWVzdEJvZHkiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJhbnkiLCJzZXNzaW9uVmFsdWUiOiJ7XCJ1c2VybmFtZVwiOlwiYWxvbnNvXCIsXCJlbWFpbFwiOlwiYS5jYW50dUB1bmlhbmRlcy5lZHUuY29cIixcInBhc3N3b3JkX2NvbmZpcm1hdGlvblwiOlwiMSMyM2w0RlwifSIsInNlc3Npb25JbmRleCI6NH0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImFueSIsInNlc3Npb25WYWx1ZSI6IiIsInNlc3Npb25JbmRleCI6NX0seyJrZXkiOiJsb2NhbFRva2VuIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiYW55Iiwic2Vzc2lvblZhbHVlIjoiIiwic2Vzc2lvbkluZGV4Ijo2fV0=)
+
+
 ## Sistema de Conversión Cloud - Escalabilidad en el Backend - Entrega 4
 
 ### Video de presentación del proyecto y resultados obtenidos
