@@ -23,25 +23,23 @@ Cloud Console.
    abra el módulo Compute Engine - VM Instances. Verá la imagen a continuación con las instancias ejecutándose. En caso
    que no estén en ejecución, seleccionelas todas y presione el botón **Start** en el menú superior. 
    
-   - En la primera imagen se muestran las VM instances del instance group web server, worker y notificator. Se desactivan las instancias de nfs-server que ahora se encuentra en un Cloud Storage, el web server, que ahora se encuentra como un instance group. El notificator se desactiva temporalmente para la ejecución de las pruebas de carga. 
-   ![VMInsances](https://user-images.githubusercontent.com/26640034/201799917-40be6ff3-3d9f-4312-90e9-edcb6ee20a3c.jpg)
 
 
-   - En la segunda imagen se muestra la instancia de SQL que está en una cuenta distinta de Google Cloud.
+   - En la primera imagen se muestra la instancia de SQL que está en una cuenta distinta de Google Cloud.
    ![SQLInstance](https://user-images.githubusercontent.com/60992168/199153040-f360a9ad-7e6a-4265-9fb6-783419d59991.jpeg)
    
-   - En la tercera imagen se muestra la instancia usada para ejecutar pruebas de estrés con JMeter
+   - En la segunda imagen se muestra la instancia usada para ejecutar pruebas de estrés con JMeter
    ![JMeter](https://user-images.githubusercontent.com/60992168/199153137-b856a885-d8f4-45bf-9afb-cbeea950a514.jpeg)
    
    
-   - En la cuarta imagen se muestra la configuración en Cloud Storage para el almacentamiento de los archivos de audio utilizados y que la App pueda           acceder a ellos cuando lo necesite. En este caso se llama cloud-conversion-tool-bucket.
+   - En la tercera imagen se muestra la configuración en Cloud Storage para el almacentamiento de los archivos de audio utilizados y que la App pueda           acceder a ellos cuando lo necesite. En este caso se llama cloud-conversion-tool-bucket.
    ![Bucket](https://user-images.githubusercontent.com/26640034/203238022-d68f78a7-388f-46a6-9a65-f0ea674fb4ec.png)
 
 
-   - En la quinta imagen se muestra la implementación del Pub/Sub, como sistema de comunicación entre la capa web server y worker de manera asíncrona. Se   muestran los eventos generados en la ejecución de la aplicación.
+   - En la cuarta  imagen se muestra la implementación del Pub/Sub, como sistema de comunicación entre la capa web server y worker de manera asíncrona. Se   muestran los eventos generados en la ejecución de la aplicación.
    ![Pub/Sub](https://user-images.githubusercontent.com/26640034/203238097-b978ae56-fac5-46f2-aba6-88e7dd49a75d.png)
    
-   - En la sexta imagen se muestra el App Engine utilizado para el web-server y el worker
+   - En la quinta imagen se muestra el App Engine utilizado para el web-server y el worker
 ![App engine](https://user-images.githubusercontent.com/26640034/205807141-77cd0729-9270-4192-9d88-e07d55e38d17.jpeg)
 
   
