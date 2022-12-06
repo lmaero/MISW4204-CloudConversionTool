@@ -1,0 +1,9 @@
+runtime: custom
+env: flex
+service: worker-test
+
+env_variables:
+  DEV_ENV: 0
+  GOOGLE_APPLICATION_CREDENTIALS: "/app/application_default_credentials.json"
+
+entrypoint: exec python3 app.py

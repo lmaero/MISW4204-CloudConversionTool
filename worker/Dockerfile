@@ -11,6 +11,7 @@ RUN set -e && \
 
 COPY . .
 
-ENV GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
+ENV DEV_ENV=0\
+    GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
 
 ENTRYPOINT exec python3 app.py

@@ -1,0 +1,15 @@
+runtime: custom
+env: flex
+service: web-server
+
+env_variables:
+  FLASK_DEBUG: "1"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_DB_NAME: "postgres"
+  SQL_INSTANCE: "35.226.86.191"
+  DEV_ENV: "1"
+  CONVERTER_IP: "172.217.203.153"
+  CONVERTER_PORT: ""
+  PYTHONUNBUFFERED: "TRUE"
+  GOOGLE_APPLICATION_CREDENTIALS: "/app/application_default_credentials.json"

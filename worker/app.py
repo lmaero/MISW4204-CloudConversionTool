@@ -22,7 +22,7 @@ print(f"Listening for messages on {subscription_path}..\n")
 
 with subscriber:
     try:
-        streaming_pull_future.result(timeout=3.0)
+        streaming_pull_future.result()
     except TimeoutError:
         streaming_pull_future.cancel()  # Trigger the shutdown.
         streaming_pull_future.result()  # Block until the shutdown is complete.
