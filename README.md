@@ -44,14 +44,7 @@ Cloud Console.
 
     
 
-
-2. El resultado de la ejecución de los comandos anteriores es el retorno del identificador del contenedor creado.
-   Permita que los contenedores inicien sus servicios, este proceso tardará aproximadamente 1 minuto. Ejecute el comando
-   del paso 3 nuevamente para verificar la correcta ejecución.
-   
-   ![Screenshot from 2022-10-31 22-21-50](https://user-images.githubusercontent.com/60992168/199153459-197f998b-10c1-4964-9c5c-a658de2b0d88.png)
-
-3. Ejecute las colecciones de Postman a continuación.
+2. Ejecute las colecciones de Postman a continuación.
 
 ## Ejecución de solicitudes - Postman
 
