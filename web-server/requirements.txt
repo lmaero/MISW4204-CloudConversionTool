@@ -8,7 +8,7 @@ flask_sqlalchemy==3.0.2
 marshmallow==3.18.0
 marshmallow_sqlalchemy==0.28.1
 pg8000==1.29.3
-werkzeug==2.2.2
+werkzeug==2.2.3
 gunicorn==20.1.0
 google-cloud-storage==2.6.0
 google-cloud-pubsub==2.13.11
